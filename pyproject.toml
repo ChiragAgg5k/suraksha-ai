@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "spot"
+version = "0.1.0"
+description = ""
+authors = ["ChiragAgg5k <110609663+ChiragAgg5k@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ultralytics = "^8.1.11"
+torch = "^2.2.0"
+torchvision = "^0.17.0"
+torchaudio = "^2.2.0"
+flask = "^3.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
