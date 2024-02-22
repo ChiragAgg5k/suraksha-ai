@@ -3,6 +3,7 @@ import math
 from flask import Flask, render_template, Response
 import cv2
 from ultralytics import YOLO
+from spot.firebase.config import auth
 
 # object classes
 classNames = [
@@ -99,6 +100,7 @@ model = YOLO("yolov8n.pt")
 def gen_frames():
     while True:
         success, frame = camera.read()
+        frame = cv2.flip(frame, 1)
         results = model(frame, stream=True)
 
         # coordinates
@@ -160,6 +162,11 @@ def video():
 @app.route("/video_feed")
 def video_feed():
     return Response(gen_frames(), mimetype="multipart/x-mixed-replace; boundary=frame")
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    return render_template("signup.html")
 
 
 if __name__ == "__main__":

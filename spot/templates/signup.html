@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}Spot AI - Sign Up{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="flex flex-col min-h-screen items-center justify-center">
+    <h1 class="text-2xl font-bold mb-4">Sign Up</h1>
+    <div class="w-full max-w-xl px-4 space-y-4">
+        <div class="flex">
+            <input class="input input-bordered w-full mr-4" placeholder="first name" />
+            <input class="input input-bordered w-full" placeholder="last name" />
+        </div>
+        <input class="input input-bordered w-full" placeholder="email" />
+        <input class="input input-bordered w-full" placeholder="password" />
+        <input class="input input-bordered w-full" placeholder="confirm password" />
+        <button class="btn w-full">Sign Up</button>
+    </div>
+</div>
+{% endblock %}

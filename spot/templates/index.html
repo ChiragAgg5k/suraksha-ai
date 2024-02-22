@@ -1,18 +1,16 @@
 {% extends "layout.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}Spot AI{% endblock %}
 {% block head %}
 {{ super() }}
-<style type="text/css">
-    .important {
-        color: #336699;
-    }
-</style>
 {% endblock %}
 {% block content %}
 <div class="flex flex-col min-h-screen items-center justify-center">
     <h1 class="text-5xl font-bold mb-2">SPOT AI</h1>
-    <h2 class="text-xl">
+    <h2 class="text-xl mb-6">
         Secure and Personal Organizing Technology
     </h2>
+    <a href="/signup" class="btn btn-wide">
+        Get Started
+    </a>
 </div>
 {% endblock %}
