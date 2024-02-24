@@ -1,6 +1,6 @@
 # Import necessary libraries
 import math
-from flask import Flask, render_template, Response, request, session
+from flask import Flask, redirect, render_template, Response, request, session
 import cv2
 from ultralytics import YOLO
 from spot.firebase.config import auth
@@ -190,13 +190,13 @@ def signup():
             return render_template("signup.html", error="Passwords do not match")
 
         user = auth.create_user_with_email_and_password(email, password)
-        auth.update_profile(
+        user = auth.update_profile(
             id_token=user["idToken"], display_name=first_name + " " + last_name
         )
 
         session["user"] = user
 
-        return render_template("profile.html")
+        return redirect("/profile")
 
     return render_template("signup.html")
 
@@ -212,7 +212,7 @@ def signin():
 
         user = auth.sign_in_with_email_and_password(email, password)
         session["user"] = user
-        return render_template("profile.html", user=user)
+        return redirect("/profile")
 
     return render_template("signin.html")
 
@@ -226,9 +226,9 @@ def signout():
 @app.route("/profile")
 def profile():
     if session.get("user") is None:
-        return render_template("signin.html")
+        return redirect("/signin")
 
-    return render_template("profile.html", user=session["user"])
+    return render_template("profile.html", user=session.get("user"))
 
 
 if __name__ == "__main__":
