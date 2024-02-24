@@ -1,6 +1,6 @@
 # Import necessary libraries
 import math
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request, session
 import cv2
 from ultralytics import YOLO
 from spot.firebase.config import auth
@@ -91,6 +91,7 @@ classNames = [
 
 # Initialize the Flask app
 app = Flask(__name__)
+app.secret_key = "secret"
 camera = cv2.VideoCapture(0)
 
 # model
@@ -166,7 +167,68 @@ def video_feed():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    if session.get("user") is not None:
+        return render_template("profile.html", user=session["user"])
+
+    if request.method == "POST":
+        first_name = request.form["first_name"]
+        last_name = request.form["last_name"]
+        email = request.form["email"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+
+        if (
+            first_name == ""
+            or last_name == ""
+            or email == ""
+            or password == ""
+            or confirm_password == ""
+        ):
+            return render_template("signup.html", error="All fields are required")
+
+        if password != confirm_password:
+            return render_template("signup.html", error="Passwords do not match")
+
+        user = auth.create_user_with_email_and_password(email, password)
+        auth.update_profile(
+            id_token=user["idToken"], display_name=first_name + " " + last_name
+        )
+
+        session["user"] = user
+
+        return render_template("profile.html")
+
     return render_template("signup.html")
+
+
+@app.route("/signin", methods=["GET", "POST"])
+def signin():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        if email == "" or password == "":
+            return render_template("signin.html", error="All fields are required")
+
+        user = auth.sign_in_with_email_and_password(email, password)
+        session["user"] = user
+        return render_template("profile.html", user=user)
+
+    return render_template("signin.html")
+
+
+@app.route("/signout")
+def signout():
+    session.pop("user", None)
+    return render_template("signin.html")
+
+
+@app.route("/profile")
+def profile():
+    if session.get("user") is None:
+        return render_template("signin.html")
+
+    return render_template("profile.html", user=session["user"])
 
 
 if __name__ == "__main__":

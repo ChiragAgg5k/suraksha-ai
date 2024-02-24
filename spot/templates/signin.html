@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}Spot AI - Sign Up{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="flex flex-col min-h-screen items-center justify-center">
+    <h1 class="text-2xl font-bold mb-4">Sign In</h1>
+    <p class="text-center text-sm text-gray-600 mb-4">
+        Welcome Back! Please sign in to continue.
+    </p>
+    <form method="post" action="/signin" class="w-full my-2 max-w-xl px-4 space-y-4">
+        <input class="input input-bordered w-full" placeholder="email" type="email" name="email" />
+        <input class="input input-bordered w-full" placeholder="password" type="password" name="password" />
+        <button class="btn w-full">Sign In</button>
+    </form>
+    <p class="text-center text-sm text-gray-600 mt-4">
+        Don't have an account? <a href="/signup" class="font-bold">Sign up</a>
+    </p>
+</div>
+{% endblock %}

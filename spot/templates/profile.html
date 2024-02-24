@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Spot AI - Profile{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="flex flex-col min-h-screen items-center justify-center">
+    <p class="mb-6">
+        Welcome back,
+        <span class="font-bold">
+            {{user['displayName']}}
+        </span>!
+    </p>
+    <a href="/signout" class="btn btn-wide">Sign Out</a>
+</div>
+{% endblock %}

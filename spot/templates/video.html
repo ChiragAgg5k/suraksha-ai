@@ -1,10 +1,16 @@
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8  offset-lg-2">
-                <h3 class="mt-5">Live Streaming</h3>
-                <img src="{{ url_for('video_feed') }}" width="100%">
-            </div>
-        </div>
-    </div>
-</body>
+{% extends "layout.html" %}
+{% block title %}Spot AI - Sign Up{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen mx-8 mt-8 flex-col">
+    <img src="{{ url_for('video_feed') }}" width="100%">
+    <p class="text-center text-sm text-gray-600 mt-4">
+        <span class="font-bold">
+            Note:
+        </span>
+        This is a live video feed from your camera. It is not stored or saved anywhere.
+    </p>
+</div>
+{% endblock %}
