@@ -1,3 +1,6 @@
+from ast import List
+from collections import defaultdict
+import datetime
 import math
 from flask import Flask, redirect, render_template, Response, request, session, url_for
 import cv2
@@ -92,7 +95,6 @@ classNames = [
 # Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = "secret"
-camera = cv2.VideoCapture(0)
 
 # model
 model = YOLO("yolov8n.pt")
@@ -112,11 +114,19 @@ def get_cameras():
 
 
 def gen_frames():
+    camera = cv2.VideoCapture(0)
+    next_time = datetime.datetime.now()
+    delta = datetime.timedelta(seconds=3)
+    objectData = {}  # person -> [freq, maxConfidence, minConfidence]
 
     while True:
+        period = datetime.datetime.now()
+
         success, frame = camera.read()
         frame = cv2.flip(frame, 1)
-        results = model(frame, stream=True)
+        results = model(frame, stream=True, verbose=False)
+
+        objectsFreq = defaultdict(List)
 
         # coordinates
         for r in results:
@@ -138,8 +148,17 @@ def gen_frames():
                 # confidence
                 confidence = math.ceil((box.conf[0] * 100)) / 100
 
+                if confidence < 0.5:
+                    continue
+
                 # class name
                 cls = int(box.cls[0])
+                cls_name = classNames[cls]
+
+                if cls_name in objectsFreq:
+                    objectsFreq[cls_name].append(confidence)
+                else:
+                    objectsFreq[cls_name] = [confidence]
 
                 # object details
                 org = [x1, y1]
@@ -149,17 +168,34 @@ def gen_frames():
                 thickness = 2
 
                 cv2.putText(
-                    frame, classNames[cls], org, font, fontScale, color, thickness
+                    frame,
+                    f"{classNames[cls]} {confidence * 100:.1f}%%",
+                    org,
+                    font,
+                    fontScale,
+                    color,
+                    thickness,
                 )
+
+            for obj in objectsFreq:
+                if obj in objectData:
+                    objectData[obj][0] = max(objectData[obj][0], len(objectsFreq[obj]))
+                    objectData[obj][1] = max(objectData[obj][1], max(objectsFreq[obj]))
+                    objectData[obj][2] = min(objectData[obj][2], min(objectsFreq[obj]))
+                else:
+                    objectData[obj] = [1, max(objectsFreq[obj]), min(objectsFreq[obj])]
+
+        if period >= next_time:
+            next_time += delta
+            print(objectData)
+            objectData = {}
 
         if not success:
             break
         else:
             ret, buffer = cv2.imencode(".jpg", frame)
             frame = buffer.tobytes()
-            yield (
-                b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
-            )  # concat frame one by one and show result
+            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
 
 
 @app.route("/")
@@ -250,4 +286,4 @@ def profile():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True, port=3000)
