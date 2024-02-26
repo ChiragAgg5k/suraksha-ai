@@ -4,8 +4,54 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-<div class="flex items-center justify-center min-h-screen mx-8 mt-8 flex-col">
-    <img src="{{ url_for('video_feed') }}" width="100%">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const videoFeed = document.getElementById('video-feed');
+        const playButton = document.getElementById('play-button');
+        const pauseButton = document.getElementById('pause-button');
+        const pauseText = document.getElementById('pause-text');
+
+        playButton.addEventListener('click', function () {
+            videoFeed.classList.remove('invisible');
+            playButton.classList.add('hidden');
+            pauseButton.classList.remove('hidden');
+            pauseText.classList.add('hidden');
+        });
+
+        pauseButton.addEventListener('click', function () {
+            videoFeed.classList.add('invisible');
+            playButton.classList.remove('hidden');
+            pauseButton.classList.add('hidden');
+            pauseText.classList.remove('hidden');
+        });
+    });
+</script>
+
+<div class="flex z-0 items-center mb-12 justify-center min-h-screen mx-8 mt-8 flex-col">
+    <h1 class="text-2xl mt-16 font-bold mb-4">Live Video Feed</h1>
+    <div class="flex items-center justify-center mb-8">
+        <p class="mr-2 text-nowrap">Select Camera:</p>
+        <select class="select select-sm select-bordered w-full max-w-xs">
+            {% for camera in cameras %}
+            <option class="font-bold">Camera {{ camera }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="relative">
+        <img src="{{ url_for('video_feed') }}" width="100%" id="video-feed">
+        <p id="pause-text" class="absolute left-0 hidden w-full text-center bottom-1/2 text-3xl text-gray-700">
+            Video feed has been paused. Click the play button to resume.
+        </p>
+        <div class="absolute left-1/2 bottom-12 text-3xl text-gray-700">
+            <button id="play-button" class="hidden">
+                <i class="fa-solid fa-play"></i>
+            </button>
+            <button id="pause-button" class="">
+                <i class="fa-solid fa-pause"></i>
+            </button>
+        </div>
+    </div>
     <p class="text-center text-sm text-gray-600 mt-4">
         <span class="font-bold">
             Note:

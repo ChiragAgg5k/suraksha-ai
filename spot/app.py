@@ -1,7 +1,7 @@
-# Import necessary libraries
 import math
-from flask import Flask, redirect, render_template, Response, request, session
+from flask import Flask, redirect, render_template, Response, request, session, url_for
 import cv2
+from scipy.__config__ import show
 from ultralytics import YOLO
 from spot.firebase.config import auth
 
@@ -98,7 +98,21 @@ camera = cv2.VideoCapture(0)
 model = YOLO("yolov8n.pt")
 
 
+def get_cameras():
+    cameras = []
+    index = 0
+    while True:
+        camera = cv2.VideoCapture(index)
+        if not camera.isOpened():
+            break
+        cameras.append(index)
+        camera.release()
+        index += 1
+    return cameras
+
+
 def gen_frames():
+
     while True:
         success, frame = camera.read()
         frame = cv2.flip(frame, 1)
@@ -123,11 +137,9 @@ def gen_frames():
 
                 # confidence
                 confidence = math.ceil((box.conf[0] * 100)) / 100
-                print("Confidence --->", confidence)
 
                 # class name
                 cls = int(box.cls[0])
-                print("Class name -->", classNames[cls])
 
                 # object details
                 org = [x1, y1]
@@ -157,7 +169,10 @@ def index():
 
 @app.route("/video")
 def video():
-    return render_template("video.html")
+    if session.get("user") is None:
+        return redirect("/signin")
+
+    return render_template("video.html", cameras=get_cameras())
 
 
 @app.route("/video_feed")
@@ -210,9 +225,12 @@ def signin():
         if email == "" or password == "":
             return render_template("signin.html", error="All fields are required")
 
-        user = auth.sign_in_with_email_and_password(email, password)
-        session["user"] = user
-        return redirect("/profile")
+        try:
+            user = auth.sign_in_with_email_and_password(email, password)
+            session["user"] = user
+            return redirect("/profile")
+        except:
+            return render_template("signin.html", error="Invalid email or password")
 
     return render_template("signin.html")
 
