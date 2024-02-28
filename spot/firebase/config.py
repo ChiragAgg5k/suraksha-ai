@@ -8,8 +8,9 @@ firebaseConfig = {
     "storageBucket": environ.get("FIREBASE_STORAGE_BUCKET"),
     "messagingSenderId": environ.get("FIREBASE_MESSAGING_SENDER_ID"),
     "appId": environ.get("FIREBASE_APP_ID"),
-    "databaseURL": "",
+    "databaseURL": environ.get("FIREBASE_DATABASE_URL"),
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
+db = firebase.database()

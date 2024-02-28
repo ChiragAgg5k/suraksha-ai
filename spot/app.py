@@ -6,7 +6,7 @@ from flask import Flask, redirect, render_template, Response, request, session, 
 import cv2
 from scipy.__config__ import show
 from ultralytics import YOLO
-from spot.firebase.config import auth
+from spot.firebase.config import auth, db
 
 # object classes
 classNames = [
@@ -95,12 +95,13 @@ classNames = [
 # Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = "secret"
+app.app_context().push()
 
 # model
 model = YOLO("yolov8n.pt")
 
 
-def get_cameras():
+def get_cameras() -> list:
     cameras = []
     index = 0
     while True:
@@ -113,11 +114,25 @@ def get_cameras():
     return cameras
 
 
-def gen_frames():
+def send_analytics(data: dict, userId: str) -> None:
+    if len(data) == 0:
+        return
+
+    if userId is None or userId == "":
+        return
+
+    try:
+        doc = db.child("analytics").child(userId).push(data)
+        print(doc)
+    except Exception as e:
+        print(e)
+
+
+def gen_frames(user_id):
     camera = cv2.VideoCapture(0)
     next_time = datetime.datetime.now()
-    delta = datetime.timedelta(seconds=3)
-    objectData = {}  # person -> [freq, maxConfidence, minConfidence]
+    delta = datetime.timedelta(seconds=30)
+    objectData = {}  # person -> {freq, maxConfidence, minConfidence}
 
     while True:
         period = datetime.datetime.now()
@@ -169,7 +184,7 @@ def gen_frames():
 
                 cv2.putText(
                     frame,
-                    f"{classNames[cls]} {confidence * 100:.1f}%%",
+                    f"{classNames[cls]} {confidence * 100:.1f}%",
                     org,
                     font,
                     fontScale,
@@ -179,15 +194,26 @@ def gen_frames():
 
             for obj in objectsFreq:
                 if obj in objectData:
-                    objectData[obj][0] = max(objectData[obj][0], len(objectsFreq[obj]))
-                    objectData[obj][1] = max(objectData[obj][1], max(objectsFreq[obj]))
-                    objectData[obj][2] = min(objectData[obj][2], min(objectsFreq[obj]))
+                    objectData[obj]["freq"] = max(
+                        objectData[obj]["freq"], len(objectsFreq[obj])
+                    )
+                    objectData[obj]["maxConfidence"] = max(
+                        objectData[obj]["maxConfidence"], max(objectsFreq[obj])
+                    )
+                    objectData[obj]["minConfidence"] = min(
+                        objectData[obj]["minConfidence"], min(objectsFreq[obj])
+                    )
+
                 else:
-                    objectData[obj] = [1, max(objectsFreq[obj]), min(objectsFreq[obj])]
+                    objectData[obj] = {
+                        "freq": len(objectsFreq[obj]),
+                        "maxConfidence": max(objectsFreq[obj]),
+                        "minConfidence": min(objectsFreq[obj]),
+                    }
 
         if period >= next_time:
             next_time += delta
-            print(objectData)
+            send_analytics(objectData, user_id)
             objectData = {}
 
         if not success:
@@ -213,7 +239,12 @@ def video():
 
 @app.route("/video_feed")
 def video_feed():
-    return Response(gen_frames(), mimetype="multipart/x-mixed-replace; boundary=frame")
+    return Response(
+        gen_frames(
+            session["user"]["localId"] if session.get("user") is not None else None
+        ),
+        mimetype="multipart/x-mixed-replace; boundary=frame",
+    )
 
 
 @app.route("/signup", methods=["GET", "POST"])
