@@ -20,7 +20,7 @@ The goal of the user-centric SPOT AI project is to improve user security and saf
 
 6. **Easy and Seamless Integration**: SPOT AI is made to work with consumers' current security camera configurations in an intuitive and seamless manner, reducing the need for complicated installs or extra hardware. This user-centric strategy improves the entire user experience and lowers adoption obstacles.
 
-7. **continual Improvement**: In order to make sure that SPOT AI stays applicable, efficient, and user-friendly over time, it was designed with the idea of continual improvement. User feedback and developing technologies are incorporated into the system.
+7. **Continual Improvement**: In order to make sure that SPOT AI stays applicable, efficient, and user-friendly over time, it was designed with the idea of continual improvement. User feedback and developing technologies are incorporated into the system.
 
 8. **Design Consistency**: To provide a seamless experience across different components, a unified design system is followed with consistent patterns for visuals, interactions and terminology.
 
@@ -48,14 +48,98 @@ height="500"
 
 ## Potential User Feedback
 
+### Industry specialists
+1. Shiv Prakash suman
+Senior System Analyst at Sopra Steria
+Email id- shiv.suman@soprasteria.com
+Mobile no. - +91 93119 52580
+
+SPOT-AI offers a compelling solution for home security, yet privacy concerns must be addressed. Clear communication about data usage is essential. Nonetheless, it's a promising step towards safer homes through advanced technology.
+Rating - 8/10
+
+
+2. Somdutt Sharma
+Senior Consultant Cloud architect at HCLtech
+Email id- somya.fa@gmail.com
+Mobile no. - +91 97182 66745
+
+SPOT-AI presents a smart solution for home security, though customizable features could enhance user experience. Nonetheless, its integration with emergency services adds significant value. Overall, a commendable effort towards safer homes.
+Rating - 8/10
+
+### Seniors
+1. Swayam Rustagi
+E21CSEU0651
+Email id- e21cseu0651@bennett.edu.in
+Mobile no. - +91 95216 85236
+
+SPOT-AI is an impressive project, leveraging AI for home security. Its swift threat detection and emergency service integration are commendable. However, ensuring robust data protection is vital for user trust. Overall, it's a promising step towards enhancing home safety.
+Rating - 9/10
+
+2. Abhay Jat
+E21CSEU0120
+Email id- e21cseu0120@bennett.edu.in
+Mobile no. - +91 89590 60040
+
+The creative approach to home security taken by the SPOT-AI project is impressive. Staying ahead of dangers requires constant AI enhancement. All things considered, it's a noble effort to make homes safer.
+Rating - 9/10
+
+3. Ayush Ray
+M21BLAU0011
+Email id-  m21Blau0011@bennett.edu.in
+Mobile no. - +91 97357 65446
+
+The SPOT-AI initiative excels in utilizing AI for home security, especially with its emergency service integration. To improve, ensuring compatibility with diverse home setups is key. Nonetheless, it's a commendable effort towards making homes safer.
+
+Rating - 8/10
+
+### Normal 5 potential user feedback
+
+1. Krish
+E22CSEU1481
+
+I think SPOT-AI is really cool for home security. It's super quick at spotting threats and connecting with emergency services fast. But, they really need to make sure our data is safe so we can trust them more. Still, it's a great start to making homes safer.
+Rating - 9/10
+
+2. Satvik Batra
+E22CSEU1491
+
+SPOT-AI is doing a great job with home security, especially with getting help quickly in emergencies. They just need to make sure it works with all kinds of homes. But overall, it's a good effort to make homes safer.
+Rating  -8/10
+
+3. Anant Aggarwal
+E22CSEU1487
+
+SPOT-AI has a really good idea for home security, but they need to be clear about how they use our data. It's important for privacy. Still, it's a good step towards safer homes with fancy technology.
+Rating - 8/10
+
+4. Pranav Anand
+E22CSEU1489
+
+I'm impressed with how SPOT-AI is making home security fun and creative. They need to keep updating their AI to stay on top of things. But overall, it's a nice way to make homes safer.
+Rating - 10/10
+
+5. Harsh Chaudhary
+E22CSEU0911
+
+SPOT-AI is a smart choice for home security, but it would be even better if we could customize it more. Still, it's great that it can call for help in an emergency. Overall, it's a good effort to keep homes safe.
+Rating - 9/10
+
+
 ## Design Documents
 
-- Use Case Diagram
+- **Use Case Diagram**
+    The primary features of the SPOT AI system and user interactions are depicted in the use case diagram. The main player is the user, who has the ability to log in, set up CCTV cameras, access the admin dashboard, and use the mobile app.
+
+    Use cases illustrate the main features of the system, such as object, anomaly, and fire detection; they also show how to receive real-time updates; interact with the chatbot; and visualize data.
+
+    Associations and relationships are used to illustrate the relationships between the actors and use cases. The use cases for object detection, anomaly detection, fire detection, receiving real-time updates, interacting with a chatbot, and visualizing data, for instance, are included in the "View Admin Dashboard" and "View Mobile App" use cases.
+
+    The "Receive Real-Time Updates" and "Respond to Incidents" use cases are linked to Security Personnel, another player in the diagram. Asserting that responding to events is an extension of receiving real-time information, the "Respond to Incidents" use case builds upon the "Receive Real-Time Updates" use case.
 
 ![Use Case Diagram](./use-case-diagram.png)
 
-- Activity Diagram
-    The overall flow and exchanges between the user, the SPOT AI system, and security staff (if applicable) are depicted in the activity diagram. The user must first gain access to the system, either by creating a new account or logging in if they already have one.
+- **Activity Diagram**
+    The overall flow and exchanges between the user, the SPOT AI system, and security staff are depicted in the activity diagram. The user must first gain access to the system, either by creating a new account or logging in if they already have one.
 
     The user chooses and configures the camera settings if they choose to configure CCTV cameras. At that point, the system simultaneously detects flames, anomalies, and objects. In addition, it provides updates, processes data in real time, and updates the admin dashboard and mobile app.
 
@@ -67,7 +151,7 @@ height="500"
 
 ![Activity Diagram](./activity-diagram.png)
 
-- Class Diagram
+- **Class Diagram**
     Users, cameras, and incidents are managed by the central `SPOTAISystem` class.
 
     Individual CCTV cameras are represented by the `Camera` class, which stores data about them such as location, settings, and camera ID. Its techniques for identifying items, irregularities, and fires allow the system to perform its essential surveillance functions.
@@ -88,30 +172,72 @@ height="500"
 
 ## Ethical and legal/privacy/terms and conditions
 
+User privacy and moral behaviour are top priorities for Spot-AI. By utilising our object detection software for commercial and residential security, you accept the following moral guidelines:
+
+**Fair Use**: The goal of our programme is to improve safety and security. Users commit to using the programme in an ethical and responsible manner, abstaining from any harmful or unlawful activity.
+
+**Non-discrimination**: No protected characteristic—including gender, race, ethnicity, or religion—is the basis for discrimination in our software. Users consent to refraining from using the software in any way that encourages bias or discrimination.¬¬
+
+**Transparency**: We try our best to be forthright and honest about our product's limitations and features. Users agree to ask questions about any of the software's capabilities and to use it for the reasons for which it was intended.
+
+**Accountability**: We are accountable for the moral application of our programme. Users consent to reporting to [Contact Information] any instances of software misuse or ethical issues.
+
+### Terms, Privacy, Legal, and Conditions:
+
+When using our object detection programme, you agree to the following terms and conditions:
+
+**User Consent**: Users grant permission for the collection, use, and storage of their data as outlined in our privacy policy.
+
+**Data Usage**: We may collect and use personal data to improve and provide our services. Users give their consent for these uses of their information.
+
+**Security procedures**: We have put in place the necessary security procedures to protect user data. Users are aware that storing data electronically or transmitting it over the internet is never completely safe.
+
+**Third-party Services**: Our programme may be able to communicate with third-party services or APIs.
+
+By agreeing to these terms and conditions, users acknowledge that they have read, understood, and agreed to comply with all provisions outlined herein.
+Spot-AI reserves the right to terminate or suspend access to the software for users who violate these terms and conditions or engage in unethical behavior.
+
 ## Feasibility study/ Business Context
 
+**Feasibility Study**: The growing need for smart security solutions and developments in computer vision technology make our object detection software for residential and commercial security practical. We have evaluated the potential of our product through market research and feasibility studies. Our team has the machine learning and software development skills required to complete the project effectively.
+Business Context of the Idea:
+The rise in security concerns among homeowners and businesses presents a significant opportunity for our object detection software. Traditional security systems have limitations in detecting anomalies effectively, leading to increased demand for advanced solutions. By providing accurate and real-time anomaly detection, we aim to address this need and offer a comprehensive security solution.
+
+**Monetization**: 
+We want to charge a subscription fee for our software, with tiers of pricing determined by the quantity of cameras and features needed. In order to include our software into their products, we might also look into collaborations or licensing arrangements with security system makers. Additionally, we can create an extra revenue stream by offering enterprise clients premium features or customization choices.
+
+**Opportunity Analysis**: 
+With the worldwide smart security market expected to grow quickly in the upcoming years, there is a significant market opportunity for our object detection software. To safeguard their assets and houses, businesses and homeowners are spending more money on intelligent security systems. We can profit from this expanding market and position ourselves as an industry leader by providing a dependable and effective anomaly detection solution. Furthermore, our software is more effective because to developments in AI and machine learning, which appeals to more potential users.
+
 ## Project cost estimation
-We can provide the following estimate for the cost of the SPOT AI project based on the COCOMO (Constructive Cost methodology) methodology and an estimation of about 15,000 lines of code:
+Labor:
+Software Engineers (2): ₹ 35 Lakh/year/engineer * 4 engineers * 3 years = ₹ 4.2 Crore (1 Crore = 10 Million)
+Data Scientists (1): ₹ 16Lakh/year * 1 engineer * 3 years = ₹ 48lakh
+Project Manager: ₹ 50 Lakh/year * 3 years = ₹1.5 Crore
+Hardware:
 
-Labor Costs: Approximately 12 person-months would be needed to complete a project with 15,000 lines of code, according to COCOMO.
-- The labor cost would be 12 person-months × $8,000 = $96,000 if the developers were paid an average of $8,000 per month.
+Development Servers (2): ₹ 3.5 Lakh/server * 2 * 3 years = ₹ 21 Lakh
+Testing Devices (Cameras, Sensors): ₹ 1.4 Lakh/device * 10 devices = ₹ 14 Lakh (Cost may vary based on complexity)
+Software:
 
-Costs of Hardware and Equipment: - $30,000 for high-end workstations used for testing and development
-- $80,000 for CCTV cameras and associated hardware for integration and testing
+Machine Learning Frameworks: ₹ 7 Lakh/year (subscriptions) * 3 years = ₹ 21 Lakh
+Cloud Storage: ₹ 3.5 Lakh/year * 3 years = ₹ 10.5 Lakh (Cost may vary based on usage)
+Other Costs:
 
-Costs of Software and Services:
-- AI development frameworks and tools: $30,000.
-- $100,000 for cloud computing services related to deployment and training
-- APIs and services provided by third parties (such as weather, mapping, etc.): $50,000
+Training Data Acquisition/Annotation: ₹ 14 Lakh (one-time cost)
+Travel/Conferences: ₹ 3.5 Lakh/year * 3 years = ₹ 10.5 Lakh
+Minimum Estimated Cost: ₹ 7 Crore
 
-Additional Fees:
-- $80,000 for office space and utilities
-- $80,000 for legal and patent filing fees
-- Other costs (such as marketing, travel, etc.): $80,000
+Maximum Estimated Cost: This can vary depending on factors like:
 
-Estimated Total Cost: $626,000.
+Team size and experience level
+Complexity of the system (features, accuracy requirements)
+Hardware/software choices
+Cloud usage
+Additional Considerations:
 
-Due to the fewer lines of code, this estimate is based on a development timetable of about a year. In addition, several expenditures have been modified to reflect a more condensed project scope, including hardware and equipment, software and services, and miscellaneous fees.
+This is a high-level estimate and actual costs may differ.
+Research and development efforts during the initial phase might incur additional expenses.
 
 ## Partial Implementation/ Draft Code 
 
@@ -128,7 +254,7 @@ https://github.com/ChiragAgg5k/spot-ai
 
 ### Week 2
 - This week, we'll be concentrating on establishing the project's aims and objectives in light of the investigation and study completed last week.
-- A pair of team members will ascertain the precise issue that needs to be resolved or the use case that needs to be addressed. For example, we could develop an application that can recognise and categorise objects in real-time video streams or analyse images for object recognition.
+- A pair of team members will ascertain the precise issue that needs to be resolved or the use case that needs to be addressed. For example, we could develop an application that can recognize and categorize objects in real-time video streams or analyze images for object recognition.
 - Two additional team members will review the literature, look up current solutions or relevant fieldwork, and evaluate each one's advantages, disadvantages, and possible areas for development.
 - All members of the team will work together to plan the project's architecture and high-level components, defining the key components, data flow, and interactions between various system components, based on this research.
 - The team members will keep a project journal in which they will record our decisions, progress, and any issues or queries that come up during this week.
@@ -149,23 +275,23 @@ https://github.com/ChiragAgg5k/spot-ai
 ### Week 5
 - We are going to add some more features to the web interface this week in order to improve our application's functionality and user experience. Real-time video streaming from cameras or other sources will be implemented by two team members, giving users the ability to feed live video and receive object detection and classification results in real-time.
 - To guarantee a seamless and effective video transmission, they will investigate and put into practice suitable streaming protocols and strategies. The remaining two members of the team will work on interactive result visualisation, which will entail showing confidence scores, bounding boxes, and object labels right on the input images or video frames.
-- They will investigate tools or methods for overlaying this data in a way that is clear and easy to use. A  secure user authentication system will also be implemented by  members of the team utilising industry-standard techniques like hashing and salting passwords or integrating with third-party authentication providers (like OAuth).
+- They will investigate tools or methods for overlaying this data in a way that is clear and easy to use. A  secure user authentication system will also be implemented by  members of the team utilizing industry-standard techniques like hashing and salting passwords or integrating with third-party authentication providers (like OAuth).
 - We will record in our project diary the specifics of the implementation, the choices we made regarding the design, and any difficulties or lessons we ran across this week.
 
 ### Week 6
 - Our team's main goal for this week is to thoroughly test our web application to make sure it works as intended and meets all project specifications. A thorough testing plan that includes user acceptability, performance, and functional testing
 - . The team members will oversee functional testing, which entails confirming that all of our application's features and functionalities operate as intended. To cover a range of scenarios, including various input data types, edge cases, and error conditions, they will create test cases .
 - We will test our application's performance, which will help us find and fix any bottlenecks or performance problems.
-- We will measure metrics like response times, resource utilisation, and scalability by simulating various load conditions using tools or techniques. Feedback from stakeholders or possible users will be gathered as part of the user acceptance testing process .
+- We will measure metrics like response times, resource utilization, and scalability by simulating various load conditions using tools or techniques. Feedback from stakeholders or possible users will be gathered as part of the user acceptance testing process .
 - The team members will assemble a representative sample of users and have them interact with our application in order to gather critical information about usability, user experience, and potential areas for improvement.
 - We will document the entire testing process, including the test plan, test cases, and results. We will also log any issues or bugs discovered during testing, as well as any related solutions or workarounds.
 
 ### Week 7
 - This week, our group will concentrate on enhancing the project's performance through the investigation of methods like GPU acceleration, parallelization, and model quantization.
 - Model quantization techniques, which involve decreasing the accuracy of the weights and activations of the neural network model to produce smaller models and faster inference times, will be studied and put into practice by team members. we will look into methods such as post-training quantization or quantization-aware training.
-- In order to maximise the available hardware resources and expedite processing times, members will focus on parallelization, which involves splitting up the computational workload among several processors or cores.
-- We will look into frameworks or libraries for parallel processing that we can incorporate into our project. The members of the team will also look into ways to use specialised hardware libraries like CUDA to take advantage of GPU acceleration, which can result in notable performance increases for computationally demanding tasks like object detection and image processing.
-- We will record the optimisation strategies we investigate, the implementation specifics, and the performance improvements attained, along with benchmarking data, code samples, and any lessons or difficulties we ran into.
+- In order to maximizxwe the available hardware resources and expedite processing times, members will focus on parallelization, which involves splitting up the computational workload among several processors or cores.
+- We will look into frameworks or libraries for parallel processing that we can incorporate into our project. The members of the team will also look into ways to use specialized hardware libraries like CUDA to take advantage of GPU acceleration, which can result in notable performance increases for computationally demanding tasks like object detection and image processing.
+- We will record the optimization strategies we investigate, the implementation specifics, and the performance improvements attained, along with benchmarking data, code samples, and any lessons or difficulties we ran into.
 
 ### Week 8
 - This week, our team will configure the required infrastructure and get our project ready for deployment.
@@ -203,9 +329,10 @@ https://github.com/ChiragAgg5k/spot-ai
 - We will reflect on the entire project experience, highlighting key learnings, successes, and areas for personal growth or improvement, and we will document the project's final state, including any feedback or suggestions received during the presentation or evaluation phase.
 
 ## LinkedIn Post
+https://www.linkedin.com/posts/chiragagg5k_artificialintelligence-surveillance-securitytech-activity-7175848431477788674-vf3M
 
 ## Patent Research
-Given that our SPOT AI research seems to incorporate unique and non-obvious technical breakthroughs, it may qualify for a patent. We might be able to patent the combination of AI-powered object detection, anomaly detection, fire detection, real-time updates, and a chatbot interface for engaging with CCTV camera data.
+Given that our SPOT AI research seems to incorporate unique and non-obvious technical breakthroughs, it can definitely qualify for a patent. We might be able to patent the combination of AI-powered object detection, anomaly detection, fire detection, real-time updates, and a chatbot interface for engaging with CCTV camera data.
 
 We should perform a comprehensive prior art search before filing for a patent to make sure that our idea is actually original and has not been anticipated by already developed technology. To help our team navigate the patent application process, which usually entails producing a comprehensive specification, claims, and supporting documentation, we need to speak with a patent attorney or agent.
 
