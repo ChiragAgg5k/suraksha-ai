@@ -199,7 +199,8 @@ Spot-AI reserves the right to terminate or suspend access to the software for us
 
 ## Feasibility study/ Business Context
 
-**Feasibility Study**: The growing need for smart security solutions and developments in computer vision technology make our object detection software for residential and commercial security practical. We have evaluated the potential of our product through market research and feasibility studies. Our team has the machine learning and software development skills required to complete the project effectively.
+**Feasibility Study**: 
+The growing need for smart security solutions and developments in computer vision technology make our object detection software for residential and commercial security practical. We have evaluated the potential of our product through market research and feasibility studies. Our team has the machine learning and software development skills required to complete the project effectively.
 Business Context of the Idea:
 The rise in security concerns among homeowners and businesses presents a significant opportunity for our object detection software. Traditional security systems have limitations in detecting anomalies effectively, leading to increased demand for advanced solutions. By providing accurate and real-time anomaly detection, we aim to address this need and offer a comprehensive security solution.
 
@@ -210,34 +211,29 @@ We want to charge a subscription fee for our software, with tiers of pricing det
 With the worldwide smart security market expected to grow quickly in the upcoming years, there is a significant market opportunity for our object detection software. To safeguard their assets and houses, businesses and homeowners are spending more money on intelligent security systems. We can profit from this expanding market and position ourselves as an industry leader by providing a dependable and effective anomaly detection solution. Furthermore, our software is more effective because to developments in AI and machine learning, which appeals to more potential users.
 
 ## Project cost estimation
-Labor:
+**Labor**:
 Software Engineers (2): ₹ 35 Lakh/year/engineer * 4 engineers * 3 years = ₹ 4.2 Crore (1 Crore = 10 Million)
 Data Scientists (1): ₹ 16Lakh/year * 1 engineer * 3 years = ₹ 48lakh
 Project Manager: ₹ 50 Lakh/year * 3 years = ₹1.5 Crore
-Hardware:
 
+**Hardware**:
 Development Servers (2): ₹ 3.5 Lakh/server * 2 * 3 years = ₹ 21 Lakh
 Testing Devices (Cameras, Sensors): ₹ 1.4 Lakh/device * 10 devices = ₹ 14 Lakh (Cost may vary based on complexity)
-Software:
 
+**Software**:
 Machine Learning Frameworks: ₹ 7 Lakh/year (subscriptions) * 3 years = ₹ 21 Lakh
 Cloud Storage: ₹ 3.5 Lakh/year * 3 years = ₹ 10.5 Lakh (Cost may vary based on usage)
-Other Costs:
 
+**Other Costs**:
 Training Data Acquisition/Annotation: ₹ 14 Lakh (one-time cost)
 Travel/Conferences: ₹ 3.5 Lakh/year * 3 years = ₹ 10.5 Lakh
+
 Minimum Estimated Cost: ₹ 7 Crore
-
 Maximum Estimated Cost: This can vary depending on factors like:
-
-Team size and experience level
-Complexity of the system (features, accuracy requirements)
-Hardware/software choices
-Cloud usage
-Additional Considerations:
-
-This is a high-level estimate and actual costs may differ.
-Research and development efforts during the initial phase might incur additional expenses.
+- Team size and experience level
+- Complexity of the system (features, accuracy requirements)
+- Hardware/software choices
+- Cloud usage
 
 ## Partial Implementation/ Draft Code 
 

@@ -6,7 +6,7 @@ from flask import Flask, redirect, render_template, Response, request, session, 
 import cv2
 from scipy.__config__ import show
 from ultralytics import YOLO
-from spot.firebase.config import auth, db
+from firebase.config import auth, db
 
 # object classes
 classNames = [
