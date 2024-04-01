@@ -1,16 +1,91 @@
-{% extends "layout.html" %}
-{% block title %}Spot AI - Profile{% endblock %}
-{% block head %}
-{{ super() }}
-{% endblock %}
-{% block content %}
-<div class="flex flex-col min-h-screen items-center justify-center">
-    <p class="mb-6">
-        Welcome back,
-        <span class="font-bold">
-            {{user['displayName']}}
-        </span>!
-    </p>
-    <a href="/signout" class="btn btn-wide">Sign Out</a>
+{% extends "layout.html" %} {% block title %}Spot AI - Profile{% endblock %} {% block head %} {{ super() }} {% endblock
+%} {% block content %}
+
+<div class="flex flex-col mt-32 items-center justify-center">
+	<p class="mb-6">
+		Welcome back,
+		<span class="font-bold"> {{user['displayName']}} </span>!
+	</p>
+	<a href="/signout" class="btn btn-wide mb-12">Sign Out</a>
+
+	<h1 class="text-2xl font-bold mb-6">Camera Logs</h1>
+
+	<div class="w-1/2 mb-16">
+		<canvas id="myChart" width="400" height="400"></canvas>
+	</div>
+
+	{% for key, value in data.items() %} {%for k, v in value.items() %}
+	<div class="flex items-center justify-center">
+		<p class="mb-2 font-semibold mr-2">{{k}}:</p>
+		<p class="mb-2">{{v}}</p>
+	</div>
+	{% endfor %}
+	<hr class="w-1/2 border-1 border-gray-300 my-3" />
+	{% endfor %}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+	    function getRandomColor() {
+	  const letters = '0123456789ABCDEF';
+	  let color = '#';
+	  for (let i = 0; i < 6; i++) {
+	    color += letters[Math.floor(Math.random() * 16)];
+	  }
+	  return color;
+	}
+
+		const ctx = document.getElementById("myChart").getContext("2d");
+		data = {{data|tojson}};
+
+
+		  let labels = [];
+
+
+		  let formattedData = {};
+		     // getting empty array for each key
+		       for (const [key, value] of Object.entries(data)) {
+		            labels.push(value.time);
+		               for(const [item, v] of Object.entries(value)){
+		                   // if formattedData[item] is not defined, create an empty array
+		                   if (!(item in formattedData)) {
+		                       formattedData[item] = [];
+		                   }
+		               }
+		       }
+
+		          for (const [time, value] of Object.entries(data)) {
+		               for(const item in formattedData){
+		                      if(item in value){
+		                          formattedData[item].push(value[item].freq);
+		                      }else{
+		                          formattedData[item].push(0);
+		                      }
+		                  }
+		       }
+
+
+		          console.log(formattedData);
+
+		             let datasets = [];
+		               for(const item in formattedData){
+		                   datasets.push({
+		                       label: item,
+		                       data: formattedData[item],
+		                       fill: false,
+		                       borderColor: getRandomColor(),
+		                       tension: 0.1
+		                   });
+		               }
+
+		       const myChart = new Chart(ctx, {
+		           type: "line",
+		           data: {
+		               labels: labels,
+		               datasets: datasets,
+		           },
+		       });
+</script>
+
 {% endblock %}

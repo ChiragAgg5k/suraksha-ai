@@ -1,69 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
+	<head>
+		{% block head %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+		<title>{% block title %}{% endblock %}</title>
+		{% endblock %}
+		<link href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css" rel="stylesheet" type="text/css" />
+		<script src="https://cdn.tailwindcss.com"></script>
 
-<head>
-    {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>{% block title %}{% endblock %}</title>
-    {% endblock %}
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+			rel="stylesheet" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+		<script src="https://kit.fontawesome.com/cbae3ce0e6.js" crossorigin="anonymous"></script>
+	</head>
 
-    <script src="https://kit.fontawesome.com/cbae3ce0e6.js" crossorigin="anonymous"></script>
-
-</head>
-
-<body style="font-family: 'Poppins', sans-serif;" class="relative">
-
-    <div class="drawer">
-        <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content flex flex-col">
-            <!-- Navbar -->
-            <div class="w-full fixed p-4 z-20 bg-white">
-                <div class="w-full navbar shadow-xl rounded-xl">
-                    <div class="flex-none lg:hidden">
-                        <label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                class="inline-block w-6 h-6 stroke-current">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </label>
-                    </div>
-                    <div class="flex-1 px-2 mx-2 font-bold">
-                        <a href="{{ url_for('index') }}" class="text-lg font-bold btn btn-sm btn-ghost">
-                            SPOT AI
-                        </a>
-                    </div>
-                    <div class="flex-none hidden lg:block">
-                        <ul class="menu menu-horizontal">
-                            <!-- Navbar menu content here -->
-                            <li><a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black">Camera Feed</a>
-                            </li>
-                            <li><a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black">Profile</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div id="content" class="z-0">{% block content %}{% endblock %}</div>
-        </div>
-        <div class="drawer-side">
-            <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-            <ul class="menu p-4 w-80 min-h-full bg-base-200">
-                <!-- Sidebar content here -->
-                <li><a>Sidebar Item 1</a></li>
-                <li><a>Sidebar Item 2</a></li>
-            </ul>
-        </div>
-    </div>
-
-</body>
-
+	<body style="font-family: 'Poppins', sans-serif" class="relative">
+		<div class="drawer">
+			<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+			<div class="drawer-content flex flex-col">
+				<!-- Navbar -->
+				<div class="w-full fixed p-4 z-20 bg-white">
+					<div class="w-full navbar shadow-xl rounded-xl">
+						<div class="flex-none lg:hidden">
+							<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									class="inline-block w-6 h-6 stroke-current">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M4 6h16M4 12h16M4 18h16"></path>
+								</svg>
+							</label>
+						</div>
+						<div class="flex-1 px-2 mx-2 font-bold">
+							<a href="{{ url_for('index') }}" class="text-lg font-bold btn btn-sm btn-ghost">
+								SPOT AI
+							</a>
+						</div>
+						<div class="flex-none hidden lg:block">
+							<ul class="menu menu-horizontal">
+								<!-- Navbar menu content here -->
+								<li>
+									<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black"
+										>Camera Feed</a
+									>
+								</li>
+								<li>
+									<a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black"
+										>Profile</a
+									>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div id="content" class="z-0">{% block content %}{% endblock %}</div>
+			</div>
+			<div class="drawer-side">
+				<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
+				<ul class="menu p-4 w-80 min-h-full bg-base-200">
+					<!-- Sidebar content here -->
+					<li><a>Sidebar Item 1</a></li>
+					<li><a>Sidebar Item 2</a></li>
+				</ul>
+			</div>
+		</div>
+	</body>
 </html>

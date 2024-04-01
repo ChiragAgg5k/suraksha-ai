@@ -2,11 +2,11 @@ from ast import List
 from collections import defaultdict
 import datetime
 import math
-from flask import Flask, redirect, render_template, Response, request, session, url_for
+from flask import Flask, redirect, render_template, Response, request, session
 import cv2
-from scipy.__config__ import show
 from ultralytics import YOLO
 from firebase.config import auth, db
+import time
 
 # object classes
 classNames = [
@@ -121,8 +121,10 @@ def send_analytics(data: dict, userId: str) -> None:
     if userId is None or userId == "":
         return
 
+    data_in_millis = round(time.time() * 1000)
+
     try:
-        doc = db.child("analytics").child(userId).push(data)
+        doc = db.child("analytics").child(userId).child(data_in_millis).set(data)
         print(doc)
     except Exception as e:
         print(e)
@@ -313,7 +315,22 @@ def profile():
     if session.get("user") is None:
         return redirect("/signin")
 
-    return render_template("profile.html", user=session.get("user"))
+    # get user data
+    print(session["user"]["localId"])
+    doc = db.child("analytics").child(session["user"]["localId"]).get()
+    data = doc.val()
+
+    if data is None:
+        data = {}
+
+    # format data
+    for time, d in data.items():
+        # format time
+        data[time]["time"] = datetime.datetime.fromtimestamp(int(time) / 1000).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+    return render_template("profile.html", user=session.get("user"), data=data)
 
 
 if __name__ == "__main__":
