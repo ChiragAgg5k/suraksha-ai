@@ -124,8 +124,7 @@ def send_analytics(data: dict, userId: str) -> None:
     data_in_millis = round(time.time() * 1000)
 
     try:
-        doc = db.child("analytics").child(userId).child(data_in_millis).set(data)
-        print(doc)
+        db.child("analytics").child(userId).child(data_in_millis).set(data)
     except Exception as e:
         print(e)
 
@@ -211,6 +210,7 @@ def gen_frames(user_id):
                         "freq": len(objectsFreq[obj]),
                         "maxConfidence": max(objectsFreq[obj]),
                         "minConfidence": min(objectsFreq[obj]),
+                        "time": period.strftime("%Y-%m-%d %H:%M:%S"),
                     }
 
         if period >= next_time:
@@ -252,7 +252,7 @@ def video_feed():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if session.get("user") is not None:
-        return render_template("profile.html", user=session["user"])
+        return redirect("/profile")
 
     if request.method == "POST":
         first_name = request.form["first_name"]
@@ -315,22 +315,21 @@ def profile():
     if session.get("user") is None:
         return redirect("/signin")
 
-    # get user data
-    print(session["user"]["localId"])
+    return render_template("profile.html", user=session.get("user"))
+
+
+@app.route("/dashboard")
+def dashboard():
+    if session.get("user") is None:
+        return redirect("/signin")
+
     doc = db.child("analytics").child(session["user"]["localId"]).get()
     data = doc.val()
 
     if data is None:
         data = {}
 
-    # format data
-    for time, d in data.items():
-        # format time
-        data[time]["time"] = datetime.datetime.fromtimestamp(int(time) / 1000).strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
-
-    return render_template("profile.html", user=session.get("user"), data=data)
+    return render_template("dashboard.html", user=session.get("user"), data=data)
 
 
 if __name__ == "__main__":

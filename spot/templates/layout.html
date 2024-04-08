@@ -46,10 +46,14 @@
 						</div>
 						<div class="flex-none hidden lg:block">
 							<ul class="menu menu-horizontal">
-								<!-- Navbar menu content here -->
 								<li>
 									<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black"
 										>Camera Feed</a
+									>
+								</li>
+								<li>
+									<a href="{{ url_for('dashboard') }}" class="btn btn-ghost active:text-black"
+										>Dashboard</a
 									>
 								</li>
 								<li>
@@ -66,9 +70,15 @@
 			<div class="drawer-side">
 				<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
 				<ul class="menu p-4 w-80 min-h-full bg-base-200">
-					<!-- Sidebar content here -->
-					<li><a>Sidebar Item 1</a></li>
-					<li><a>Sidebar Item 2</a></li>
+					<li>
+						<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black">Camera Feed</a>
+					</li>
+					<li>
+						<a href="{{ url_for('dashboard') }}" class="btn btn-ghost active:text-black">Dashboard</a>
+					</li>
+					<li>
+						<a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black">Profile</a>
+					</li>
 				</ul>
 			</div>
 		</div>
