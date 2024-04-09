@@ -236,7 +236,9 @@ def video():
     if session.get("user") is None:
         return redirect("/signin")
 
-    return render_template("video.html", cameras=get_cameras())
+    camera_feed = request.args.get("camera_feed", False) == "True"
+
+    return render_template("video.html", cameras=get_cameras(), camera_feed=camera_feed)
 
 
 @app.route("/video_feed")

@@ -3,7 +3,8 @@ endblock %} {% block content %}
 
 <div class="flex flex-col mt-32 items-center justify-center">
 	{% if data != {} %}
-	<div class="w-1/2 mb-16">
+	<h2 class="font-bold text-xl mb-2">Logs Chart</h2>
+	<div class="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 mb-16">
 		<canvas id="myChart" width="400" height="400"></canvas>
 	</div>
 	{% endif %} {% if data == {} %}
@@ -12,7 +13,8 @@ endblock %} {% block content %}
 		<p class="text-gray-500 text-sm">Make sure you have the Spot AI application running in the background.</p>
 	</div>
 	{% else %}
-	<div class="overflow-x-auto mb-16">
+	<h2 class="font-bold text-xl mb-2 mt-16">Current Logs</h2>
+	<div class="overflow-x-auto mb-16 h-[50vh] overflow-y-auto border p-4 rounded">
 		<table class="table table-xs">
 			<thead>
 				<tr>
