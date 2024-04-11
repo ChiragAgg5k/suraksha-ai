@@ -7,6 +7,8 @@ import cv2
 from ultralytics import YOLO
 from firebase.config import auth, db
 import time
+from flask_mail import Mail, Message
+import os
 
 # object classes
 classNames = [
@@ -97,8 +99,20 @@ app = Flask(__name__)
 app.secret_key = "secret"
 app.app_context().push()
 
-# model
+app.config["MAIL_SERVER"] = "sandbox.smtp.mailtrap.io"
+app.config["MAIL_PORT"] = 2525
+app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+
 model = YOLO("yolov8n.pt")
+mail = Mail(app)
+
+
+def send_email(msg, subject, sender, recipients):
+    msg = Message(subject, sender=sender, recipients=recipients, body=msg)
+    mail.send(msg)
 
 
 def get_cameras() -> list:
@@ -129,7 +143,7 @@ def send_analytics(data: dict, userId: str) -> None:
         print(e)
 
 
-def gen_frames(user_id):
+def gen_frames(user_id, user_email, mail: Mail):
     camera = cv2.VideoCapture(0)
     next_time = datetime.datetime.now()
     delta = datetime.timedelta(seconds=30)
@@ -171,6 +185,17 @@ def gen_frames(user_id):
                 cls = int(box.cls[0])
                 cls_name = classNames[cls]
 
+                if cls_name == "fork":
+                    with app.app_context():
+                        print("Alert! Weapon detected")
+                        msg = Message(
+                            "Alert! Weapon detected",
+                            sender=user_email,
+                            recipients=[user_email],
+                            body="A weapon has been detected in the camera feed",
+                        )
+                        mail.send(msg)
+
                 if cls_name in objectsFreq:
                     objectsFreq[cls_name].append(confidence)
                 else:
@@ -180,7 +205,11 @@ def gen_frames(user_id):
                 org = [x1, y1]
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 fontScale = 1
+
                 color = (255, 0, 0)
+                if cls_name == "fork":
+                    color = (0, 0, 255)
+
                 thickness = 2
 
                 cv2.putText(
@@ -245,7 +274,9 @@ def video():
 def video_feed():
     return Response(
         gen_frames(
-            session["user"]["localId"] if session.get("user") is not None else None
+            session["user"]["localId"] if session.get("user") is not None else None,
+            session["user"]["email"] if session.get("user") is not None else None,
+            mail,
         ),
         mimetype="multipart/x-mixed-replace; boundary=frame",
     )
