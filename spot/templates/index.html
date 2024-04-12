@@ -16,11 +16,61 @@ block content %}
 	</h2>
 	<div class="flex items-center justify-center gap-2 flex-col sm:flex-row">
 		<a href="/signup" class="btn btn-outline btn-wide">Sign Up -></a>
-		<a href="/signup" class="btn btn-wide">Get Started</a>
+		<a href="/signup" class="btn btn-neutral btn-wide">Get Started</a>
 	</div>
 </div>
 
-<footer class="footer p-10 bg-neutral text-neutral-content">
+<div class="grid mb-32 grid-cols-1 md:grid-cols-3 gap-6 p-8 text-center">
+	<div
+		data-aos="fade-up"
+		class="border min-h-[40dvh] rounded-xl text-neutral/70 hover:text-neutral flex flex-col items-center justify-center p-4 hover:shadow-xl transition duration-300">
+		<div class="text-4xl mb-2">
+			<i class="fa-solid fa-camera"></i>
+		</div>
+		<p class="font-semibold text-lg">Object Detection</p>
+		<p class="text-sm text-neutral/60">
+			Detect objects in your home and get real-time alerts for any security breaches
+		</p>
+	</div>
+	<div
+		data-aos="fade-up"
+		class="border min-h-[40dvh] rounded-xl text-neutral/70 hover:text-neutral flex flex-col items-center justify-center p-4 hover:shadow-xl transition duration-300">
+		<div class="text-4xl mb-2">
+			<i class="fa-solid fa-shield-halved"></i>
+		</div>
+		<p class="font-semibold text-lg mb-2">Anomaly Detection</p>
+		<p class="text-sm text-neutral/60">
+			Quietly monitor your home security system and get alerts for any anomalies detected
+		</p>
+	</div>
+	<div
+		data-aos="fade-up"
+		class="border min-h-[40dvh] rounded-xl text-neutral/70 hover:text-neutral flex flex-col items-center justify-center p-4 hover:shadow-xl transition duration-300">
+		<div class="text-4xl mb-2">
+			<i class="fa-solid fa-gauge-simple-high"></i>
+		</div>
+		<p class="font-semibold text-lg">Realtime Alerts</p>
+		<p class="text-sm text-neutral/60">
+			Fast and reliable alerts to keep you informed about any security breaches in your home
+		</p>
+	</div>
+</div>
+
+<div class="flex items-center justify-center p-8">
+	<div class="mockup-browser w-full border border-base-300">
+		<div class="mockup-browser-toolbar">
+			<div class="input border border-base-300">https://spot-ai.com</div>
+		</div>
+		<div class="flex flex-col md:flex-row border-t items-center justify-center py-8 px-16">
+			<img class="w-full md:w-1/2" src="{{url_for('static', filename='object-detection-demo.jpg')}}" />
+			<div class="w-full md:w-1/2">
+				<canvas id="myChart" width="400" height="400"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer class="footer mt-24 p-10 bg-neutral text-neutral-content">
 	<aside>
 		<svg
 			width="50"
@@ -71,4 +121,278 @@ block content %}
 		</div>
 	</nav>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+	function getRandomColor() {
+		const letters = "0123456789ABCDEF";
+		let color = "#";
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	}
+
+	function formatTime(milliseconds, timeZone = "IST") {
+		// Create a new Date object from the milliseconds
+		const date = new Date(milliseconds);
+
+		// Get the day of the week, month, date, year, hours, minutes, and seconds
+		const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+		const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		const dayOfWeek = daysOfWeek[date.getDay()];
+		const day = date.getDate().toString().padStart(2, "0");
+		const month = months[date.getMonth()];
+		const year = date.getFullYear();
+		const hours = date.getHours().toString().padStart(2, "0");
+		const minutes = date.getMinutes().toString().padStart(2, "0");
+		const seconds = date.getSeconds().toString().padStart(2, "0");
+
+		// Return the formatted time string
+		return `${dayOfWeek}, ${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${timeZone}`;
+	}
+
+	const ctx = document.getElementById("myChart").getContext("2d");
+	data = {
+		1712585416348: {
+			"cell phone": {
+				freq: 2,
+				maxConfidence: 0.86,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:39:50"
+			},
+			person: {
+				freq: 2,
+				maxConfidence: 0.9,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:39:46"
+			},
+			zebra: {
+				freq: 1,
+				maxConfidence: 0.95,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:39:46"
+			}
+		},
+		1712585834808: {
+			bottle: {
+				freq: 2,
+				maxConfidence: 0.93,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:46:48"
+			},
+			"cell phone": {
+				freq: 1,
+				maxConfidence: 0.51,
+				minConfidence: 0.51,
+				time: "2024-04-08 19:46:46"
+			},
+			chair: {
+				freq: 1,
+				maxConfidence: 0.79,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:03"
+			},
+			handbag: {
+				freq: 1,
+				maxConfidence: 0.57,
+				minConfidence: 0.55,
+				time: "2024-04-08 19:47:00"
+			},
+			person: {
+				freq: 3,
+				maxConfidence: 0.96,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:46:44"
+			},
+			refrigerator: {
+				freq: 1,
+				maxConfidence: 0.78,
+				minConfidence: 0.51,
+				time: "2024-04-08 19:46:46"
+			},
+			suitcase: {
+				freq: 1,
+				maxConfidence: 0.6,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:46:52"
+			},
+			"wine glass": {
+				freq: 1,
+				maxConfidence: 0.73,
+				minConfidence: 0.73,
+				time: "2024-04-08 19:46:48"
+			}
+		},
+		1712585864842: {
+			bottle: {
+				freq: 2,
+				maxConfidence: 0.96,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:15"
+			},
+			"cell phone": {
+				freq: 1,
+				maxConfidence: 0.89,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:18"
+			},
+			chair: {
+				freq: 1,
+				maxConfidence: 0.7,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:24"
+			},
+			person: {
+				freq: 3,
+				maxConfidence: 0.96,
+				minConfidence: 0.51,
+				time: "2024-04-08 19:47:15"
+			},
+			remote: {
+				freq: 1,
+				maxConfidence: 0.52,
+				minConfidence: 0.52,
+				time: "2024-04-08 19:47:18"
+			}
+		},
+		1712585894848: {
+			bottle: {
+				freq: 2,
+				maxConfidence: 0.97,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:45"
+			},
+			"cell phone": {
+				freq: 1,
+				maxConfidence: 0.69,
+				minConfidence: 0.53,
+				time: "2024-04-08 19:47:45"
+			},
+			chair: {
+				freq: 1,
+				maxConfidence: 0.71,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:45"
+			},
+			person: {
+				freq: 3,
+				maxConfidence: 0.96,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:47:45"
+			}
+		},
+		1712585924907: {
+			bottle: {
+				freq: 3,
+				maxConfidence: 0.96,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:48:15"
+			},
+			"cell phone": {
+				freq: 1,
+				maxConfidence: 0.76,
+				minConfidence: 0.51,
+				time: "2024-04-08 19:48:31"
+			},
+			chair: {
+				freq: 1,
+				maxConfidence: 0.67,
+				minConfidence: 0.51,
+				time: "2024-04-08 19:48:15"
+			},
+			person: {
+				freq: 3,
+				maxConfidence: 0.95,
+				minConfidence: 0.5,
+				time: "2024-04-08 19:48:15"
+			}
+		},
+		1712592191647: {
+			person: {
+				freq: 1,
+				maxConfidence: 0.79,
+				minConfidence: 0.79,
+				time: "2024-04-08 21:33:10"
+			}
+		},
+		1712592803052: {
+			person: {
+				freq: 1,
+				maxConfidence: 0.9,
+				minConfidence: 0.78,
+				time: "2024-04-08 21:42:53"
+			},
+			zebra: {
+				freq: 1,
+				maxConfidence: 0.66,
+				minConfidence: 0.5,
+				time: "2024-04-08 21:42:53"
+			}
+		},
+		1712592851744: {
+			person: {
+				freq: 1,
+				maxConfidence: 0.92,
+				minConfidence: 0.84,
+				time: "2024-04-08 21:43:42"
+			},
+			zebra: {
+				freq: 1,
+				maxConfidence: 0.64,
+				minConfidence: 0.5,
+				time: "2024-04-08 21:43:54"
+			}
+		},
+		1712592860671: {
+			person: {
+				freq: 1,
+				maxConfidence: 0.91,
+				minConfidence: 0.91,
+				time: "2024-04-08 21:44:19"
+			}
+		}
+	};
+
+	let labels = Object.keys(data).map((time) => formatTime(parseInt(time)));
+	let formattedData = {};
+
+	for (const [key, value] of Object.entries(data)) {
+		for (const [item, v] of Object.entries(value)) {
+			if (!(item in formattedData)) {
+				formattedData[item] = [];
+			}
+		}
+	}
+
+	for (const [time, value] of Object.entries(data)) {
+		for (const item in formattedData) {
+			if (item in value) {
+				formattedData[item].push(value[item].freq);
+			} else {
+				formattedData[item].push(0);
+			}
+		}
+	}
+
+	let datasets = [];
+	for (const item in formattedData) {
+		datasets.push({
+			label: item,
+			data: formattedData[item],
+			fill: false,
+			borderColor: getRandomColor(),
+			tension: 0.1
+		});
+	}
+
+	const myChart = new Chart(ctx, {
+		type: "line",
+		data: {
+			labels: labels,
+			datasets: datasets
+		}
+	});
+</script>
+
 {% endblock %}
