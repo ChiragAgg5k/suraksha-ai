@@ -185,17 +185,6 @@ def gen_frames(user_id, user_email, mail: Mail):
                 cls = int(box.cls[0])
                 cls_name = classNames[cls]
 
-                if cls_name == "fork":
-                    with app.app_context():
-                        print("Alert! Weapon detected")
-                        msg = Message(
-                            "Alert! Weapon detected",
-                            sender=user_email,
-                            recipients=[user_email],
-                            body="A weapon has been detected in the camera feed",
-                        )
-                        mail.send(msg)
-
                 if cls_name in objectsFreq:
                     objectsFreq[cls_name].append(confidence)
                 else:
@@ -207,7 +196,7 @@ def gen_frames(user_id, user_email, mail: Mail):
                 fontScale = 1
 
                 color = (255, 0, 0)
-                if cls_name == "fork":
+                if cls_name == "knife":
                     color = (0, 0, 255)
 
                 thickness = 2
@@ -257,7 +246,9 @@ def gen_frames(user_id, user_email, mail: Mail):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+    )
 
 
 @app.route("/video")

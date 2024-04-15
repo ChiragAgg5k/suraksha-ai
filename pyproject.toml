@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "spot"
-version = "0.1.0"
-description = ""
+version = "0.8.5"
+description = "SPOT AI provides smart security surveillance solutions such as face recognition, object detection, and more."
 authors = ["ChiragAgg5k <110609663+ChiragAgg5k@users.noreply.github.com>"]
 readme = "README.md"
 
@@ -12,6 +12,8 @@ torch = "^2.2.0"
 torchvision = "^0.17.0"
 torchaudio = "^2.2.0"
 flask = "^3.0.2"
+flask-mail = "^0.9.1"
+pyrebase4 = "^4.7.1"
 
 
 [build-system]

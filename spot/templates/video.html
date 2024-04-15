@@ -1,8 +1,8 @@
 {% extends "layout.html" %} {% block title %}Spot AI - Sign Up{% endblock %} {% block head %} {{ super() }} {% endblock
 %} {% block content %}
 
-<div class="flex z-0 items-center mb-12 justify-center min-h-screen mx-8 mt-8 flex-col">
-	<h1 class="text-2xl mt-16 font-bold mb-4">Live Video Feed</h1>
+<div class="flex z-0 items-center mb-12 justify-center min-h-screen mx-8 mt-12 flex-col">
+	<h1 class="text-2xl mt-32 font-bold mb-4">Live Video Feed</h1>
 	<div class="flex items-center justify-center mb-8">
 		<p class="mr-2 text-nowrap">Select Camera:</p>
 		<select class="select select-sm select-bordered w-full max-w-xs">
@@ -11,7 +11,7 @@
 			{% endfor %}
 		</select>
 	</div>
-	<div class="relative">
+	<div class="relative w-full max-w-3xl mb-12">
 		{% if camera_feed %}
 		<img src="{{ url_for('video_feed') }}" width="100%" id="video-feed" />
 		<div class="absolute left-1/2 bottom-12 text-3xl text-gray-700">
@@ -26,13 +26,40 @@
 			This is a live video feed from your camera. It is not stored or saved anywhere.
 		</p>
 		{% else %}
-		<div class="flex flex-col items-center justify-center w-full h-96">
+		<div class="flex flex-col bg-base-200 px-16 rounded-xl items-center justify-center w-full h-96">
 			<p class="text-center text-sm text-gray-600">Camera feed is paused. Click the play button to resume.</p>
-			<a href="{{ url_for('video', camera_feed=true) }}" id="play-button" class="text-xl mt-4">
+			<a
+				href="{{ url_for('video', camera_feed=true) }}"
+				id="play-button"
+				class="text-xl mt-4 hover:text-neutral/80">
 				<i class="fa-solid fa-play"></i>
 			</a>
 		</div>
 		{% endif %}
+	</div>
+	<div class="flex items-center w-full justify-center">
+		<div class="rounded-xl max-w-xl w-full mr-8 border p-8">
+			<h2 class="text-lg text-neutral/90 font-semibold">Settings</h2>
+			<div class="flex items-center justify-between w-full mt-4">
+				<p class="text-sm text-gray-600 mr-2">Resolution:</p>
+				<select class="select select-sm select-bordered w-full">
+					<option>1920x1080</option>
+					<option>1280x720</option>
+					<option>640x480</option>
+				</select>
+			</div>
+			<div class="flex items-center justify-between w-full mt-4">
+				<p class="text-sm text-gray-600 mt-4">Send Analytics Data:</p>
+				<input type="checkbox" class="toggle" checked />
+			</div>
+			<div class="flex items-center justify-center w-full mt-8">
+				<div class="join">
+					<button class="btn bg-base-100 text-neutral/80 join-item">Record Video</button>
+					<button class="btn bg-base-100 text-neutral/80 join-item">Take Screenshot</button>
+					<button class="btn bg-base-100 text-neutral/80 join-item">Upload Frame</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}
