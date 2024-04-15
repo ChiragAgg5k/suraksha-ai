@@ -96,6 +96,20 @@ classNames = [
     "toothbrush",
 ]
 
+THREAT_OBJECTS = [
+    "knife",
+    "fork",  # for demonstration purposes
+    "gun",
+    "firearm",
+    "rifle",
+    "pistol",
+    "revolver",
+    "shotgun",
+    "fire",
+    "bomb",
+    "explosive",
+]
+
 # Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = "secret"
@@ -167,6 +181,17 @@ def upload_frame_to_firebase(frame, user_id, timestamp):
     storage.child(filename).put(image_data)
 
 
+def get_images(user_id):
+    images = []
+    try:
+        storage_files = storage.child(user_id).get_url(user_id)
+        print(storage_files)
+    except Exception as e:
+        print(e)
+
+    return images
+
+
 def gen_frames(user_id, user_email, mail: Mail):
     camera = cv2.VideoCapture(0)
     next_time = datetime.datetime.now()
@@ -222,10 +247,10 @@ def gen_frames(user_id, user_email, mail: Mail):
 
                 color = (255, 0, 0)
 
-                if cls_name == "fork":
+                if cls_name in THREAT_OBJECTS:
                     color = (0, 0, 255)
 
-                if cls_name == "fork" and not email_sent:
+                if cls_name in THREAT_OBJECTS and not email_sent:
                     with app.app_context():
 
                         upload_frame_to_firebase(
@@ -407,7 +432,15 @@ def dashboard():
     if data is None:
         data = {}
 
-    return render_template("dashboard.html", user=session.get("user"), data=data)
+    # reduce data to 10 most recent entries
+    data = dict(list(data.items())[-15:])
+
+    return render_template(
+        "dashboard.html",
+        user=session.get("user"),
+        data=data,
+        images=get_images(session["user"]["localId"]),
+    )
 
 
 if __name__ == "__main__":
