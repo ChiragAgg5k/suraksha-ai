@@ -129,7 +129,7 @@ model = YOLO("yolov8n.pt")
 mail = Mail(app)
 
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
-model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+chat_bot_model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
 
 
 def get_chat_response(text):
@@ -145,7 +145,7 @@ def get_chat_response(text):
             else new_user_input_ids
         )
 
-        chat_history_ids = model.generate(
+        chat_history_ids = chat_bot_model.generate(
             bot_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id
         )
 
