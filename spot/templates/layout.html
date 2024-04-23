@@ -18,6 +18,33 @@
 	</head>
 
 	<body style="font-family: 'Poppins', sans-serif" class="relative">
+		<div class="h-screen absolute top-0 w-full">
+			<div class="fixed bottom-4 right-4 z-50 w-full max-w-sm h-fit">
+				<div class="collapse bg-base-200">
+					<input type="checkbox" />
+					<div class="collapse-title items-center justify-center flex text-md font-medium">
+						<div class="mr-4 text-xl">
+							<i class="fa-solid fa-robot"></i>
+						</div>
+						Chat with <span class="font-bold ml-2">SPOT-AI</span>
+					</div>
+					<div class="collapse-content text-sm">
+						<div id="messageFormeight" class="mb-6 w-full"></div>
+						<form id="messageArea" class="input-group">
+							<input
+								type="text"
+								id="text"
+								name="msg"
+								placeholder="Type your message..."
+								autocomplete="off"
+								class="form-control type_msg text-sm input input-bordered w-full"
+								required />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="drawer">
 			<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
 			<div class="drawer-content flex flex-col">
@@ -94,6 +121,41 @@
 		<script>
 			AOS.init({
 				duration: 1200
+			});
+		</script>
+
+		<script>
+			const messageForm = document.getElementById("messageFormeight");
+			const messageArea = document.getElementById("messageArea");
+			const text = document.getElementById("text");
+			const send = document.getElementById("send");
+
+			messageArea.addEventListener("submit", (e) => {
+				e.preventDefault();
+				const message = text.value;
+				const messageElement = document.createElement("div");
+				messageElement.classList.add("chat");
+				messageElement.classList.add("chat-start");
+				messageElement.innerHTML = `<div class="chat-bubble">${message}</div>`;
+				messageForm.appendChild(messageElement);
+				text.value = "";
+				messageForm.scrollTop = messageForm.scrollHeight;
+
+				fetch("/chat", {
+					method: "POST",
+					body: new URLSearchParams({
+						msg: message
+					})
+				})
+					.then((response) => response.text())
+					.then((data) => {
+						const messageElement = document.createElement("div");
+						messageElement.classList.add("chat");
+						messageElement.classList.add("chat-end");
+						messageElement.innerHTML = `<div class="chat-bubble">${data}</div>`;
+						messageForm.appendChild(messageElement);
+						messageForm.scrollTop = messageForm.scrollHeight;
+					});
 			});
 		</script>
 	</body>
