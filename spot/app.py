@@ -128,7 +128,9 @@ app.config["MAIL_USE_SSL"] = False
 model = YOLO("yolov8n.pt")
 mail = Mail(app)
 
-tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
+tokenizer = AutoTokenizer.from_pretrained(
+    "microsoft/DialoGPT-medium", padding_size="left"
+)
 chat_bot_model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
 
 
@@ -155,7 +157,7 @@ def get_chat_response(text):
         )
 
 
-@app.route("/get", methods=["GET", "POST"])
+@app.route("/chat", methods=["GET", "POST"])
 def chat():
     msg = request.form["msg"]
     input = msg
@@ -220,15 +222,14 @@ def upload_frame_to_firebase(frame, user_id, timestamp):
 def get_images(user_id):
     images = []
     try:
-        storage_files = storage.child(user_id).get_url(user_id)
-        print(storage_files)
+        storage.child(user_id).get_url(user_id)
     except Exception as e:
         print(e)
 
     return images
 
 
-def gen_frames(user_id, user_email, mail: Mail):
+def gen_frames(user_id, user_email):
     camera = cv2.VideoCapture(0)
     next_time = datetime.datetime.now()
     delta = datetime.timedelta(seconds=30)
@@ -382,7 +383,6 @@ def video_feed():
         gen_frames(
             session["user"]["localId"] if session.get("user") is not None else None,
             session["user"]["email"] if session.get("user") is not None else None,
-            mail,
         ),
         mimetype="multipart/x-mixed-replace; boundary=frame",
     )

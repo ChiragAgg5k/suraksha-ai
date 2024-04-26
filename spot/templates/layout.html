@@ -155,6 +155,9 @@
 						messageElement.innerHTML = `<div class="chat-bubble">${data}</div>`;
 						messageForm.appendChild(messageElement);
 						messageForm.scrollTop = messageForm.scrollHeight;
+					})
+					.catch((error) => {
+						console.error("Error:", error);
 					});
 			});
 		</script>
