@@ -43,8 +43,6 @@ SPOT AI is built with the following technologies:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
-
 ## Getting Started
 
 To start using SPOT AI, follow the steps below.
@@ -101,3 +99,28 @@ poetry run python src/app.py
 [Chart.js]: https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white
 [Yolov8]: https://img.shields.io/badge/YOLOv8-000000?style=for-the-badge&logo=python&logoColor=white
 [Huggingface]: https://img.shields.io/badge/Hugging%20Face-000000?style=for-the-badge&logo=huggingface&logoColor=yellow
+
+## Features
+
+-   **Object Detection**
+
+    Accurately detect and identify objects in the video stream.
+    <img src="assets/object_detection.png" alt="Object Detection" width="300" height="200">
+
+-   **Camera Logs**
+    View the logs of the camera and the objects detected.
+    <img src="assets/logs.png" alt="Camera Logs" width="300" height="250">
+
+-   **Chatbot**
+    Get notifications and alerts on your phone using the chatbot.
+    <img src="assets/chatbot.png" alt="Chatbot" width="300" height="300">
+
+## Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE.txt) for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
