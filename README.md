@@ -103,7 +103,6 @@ poetry run python src/app.py
 ## Features
 
 -   **Object Detection**
-
     Accurately detect and identify objects in the video stream.
     <img src="assets/object_detection.png" alt="Object Detection" width="300" height="200">
 
