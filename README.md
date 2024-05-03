@@ -51,38 +51,33 @@ To start using SPOT AI, follow the steps below.
 
 You will need the following tools to get started:
 
--   python
+-   **Python** - Follow the instructions [here](https://www.python.org/downloads/) to install Python.
+
+-   **Poetry** - A tool for dependency management and packaging in Python. You can install it using the following command:
 
 ```sh
-sudo apt-get install python3 # for linux
-brew install python3 # for mac
-choco install python3 # for windows
-```
-
--   poetry
-
-```sh
-pip install poetry
+python3 -m pip install poetry
 ```
 
 ### Installation
 
-1. Clone the repository.
+1. Clone the repository either using the GitHub GUI or the following command:
 
 ```sh
+cd path/to/directory
 git clone https://github.com/ChiragAgg5k/spot-ai
 cd spot-ai
 ```
 
-2. Install the dependencies.
+1. Install the required dependencies using Poetry.
 
 ```sh
 poetry install
 ```
 
-3. Create a firebase project and get the credentials. You can follow the instructions [here](https://firebase.google.com/docs/web/setup)
+3. Create a new **Firebase** project and get the required credentials. You can follow the instructions [here](https://firebase.google.com/docs/web/setup)
 
-4. Create a Mailtrap account and get the credentials for email notifications. You can follow the instructions [here](https://mailtrap.io/)
+4. Create a **Mailtrap** account and get the credentials for email notifications. You can follow the instructions [here](https://mailtrap.io/)
 5. Create a .env file in the root directory and add the required credentials. Follow the [.env.example](.env.example) file for reference.
 
 6. Run the application.

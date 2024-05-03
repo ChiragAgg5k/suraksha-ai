@@ -15,6 +15,7 @@
 			rel="stylesheet" />
 		<script src="https://kit.fontawesome.com/cbae3ce0e6.js" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+		<link rel="icon" href="{{ url_for('static', filename='logo.svg') }}" />
 	</head>
 
 	<body style="font-family: 'Poppins', sans-serif" class="relative">
@@ -29,7 +30,13 @@
 						Chat with <span class="font-bold ml-2">SPOT-AI</span>
 					</div>
 					<div class="collapse-content text-sm">
-						<div id="messageFormeight" class="mb-6 max-h-[16rem] overflow-y-scroll w-full"></div>
+						<div id="messageFormeight" class="mb-6 max-h-[16rem] overflow-y-scroll w-full">
+							<div class="chat chat-end">
+								<div class="chat-bubble">
+									Hello! I am SPOT-AI, your virtual assistant. How can I help you today?
+								</div>
+							</div>
+						</div>
 						<form id="messageArea" class="input-group">
 							<input
 								type="text"
@@ -68,6 +75,7 @@
 						</div>
 						<div class="flex-1 px-2 mx-2 font-bold">
 							<a href="{{ url_for('index') }}" class="text-lg font-bold btn btn-sm btn-ghost">
+								<img src="{{ url_for('static', filename='logo.svg') }}" class="w-8 h-8" alt="logo" />
 								SPOT-AI
 							</a>
 						</div>
