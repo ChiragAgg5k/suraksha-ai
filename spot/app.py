@@ -15,10 +15,6 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 import base64
 import numpy as np
-from llmware.models import ModelCatalog
-from llmware.gguf_configs import GGUFConfigs
-
-GGUFConfigs().set_config("max_output_tokens", 500)
 
 # object classes
 classNames = [
