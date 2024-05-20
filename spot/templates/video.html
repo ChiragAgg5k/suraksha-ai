@@ -55,10 +55,10 @@
 			<div class="flex items-center justify-center w-full mt-8">
 				<div class="join">
 					<button class="btn bg-base-100 text-neutral/80 join-item">Record Video</button>
-					<button class="btn bg-base-100 text-neutral/80 join-item" onclick="capture();">
+					<button class="btn bg-base-100 text-neutral/80 join-item" onclick="download_ss();">
 						Take Screenshot
 					</button>
-					<button class="btn bg-base-100 text-neutral/80 join-item">Upload Frame</button>
+					<button class="btn bg-base-100 text-neutral/80 join-item"  onclick="capture();">Upload Frame</button>
 				</div>
 			</div>
 		</div>
@@ -91,6 +91,34 @@
 
 		console.log("Image captured.");
 	}
+
+	function download_ss() {
+    console.log("Downloading image...");
+    var img = document.getElementById("video-feed");
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    var data = canvas.toDataURL("image/png");
+
+    var link = document.createElement('a');
+    link.href = data;
+
+    var now = new Date();
+	var timestamp = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + '_' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds();
+
+	link.download = timestamp + '.png';
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    console.log("Image captured and download started.");
+}
 </script>
 
 {% endblock %}
