@@ -112,6 +112,7 @@ THREAT_OBJECTS = [
     "fire",
     "bomb",
     "explosive",
+    "cell phone",
 ]
 
 # Initialize the Flask app
@@ -497,6 +498,15 @@ def dashboard():
         images=get_images(session["user"]["localId"]),
     )
 
+@app.route('/clear_logs', methods=['POST'])
+def clear_logs():
+    if session.get("user") is None:
+        return redirect("/signin")
+
+    # Clear the logs from the database
+    db.child("analytics").child(session["user"]["localId"]).remove()
+
+    return redirect("dashboard")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=3000)
