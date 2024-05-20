@@ -13,7 +13,8 @@ import threading
 import cv2
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
-
+import base64
+import numpy as np
 
 # object classes
 classNames = [
@@ -206,14 +207,14 @@ def send_analytics(data: dict, userId: str) -> None:
         print(e)
 
 
-def upload_frame_to_firebase(frame, user_id, timestamp):
+def upload_frame_to_firebase(frame, user_id, timestamp, folder="records"):
 
     # Convert the frame to PNG image data
     _, buffer = cv2.imencode(".png", frame)
     image_data = buffer.tobytes()
 
     # Create a unique filename for the frame
-    filename = f"{user_id}/{timestamp}.png"
+    filename = f"{user_id}/{folder}/{timestamp}.png"
 
     # Upload the frame to Firebase Storage
     storage.child(filename).put(image_data)
@@ -227,6 +228,24 @@ def get_images(user_id):
         print(e)
 
     return images
+
+
+@app.route("/capture", methods=["POST"])
+def capture():
+    data_url = request.json["img_data"]
+    img_data = base64.b64decode(data_url.split(",")[1])
+    nparry = np.frombuffer(img_data, np.uint8)
+    img = cv2.imdecode(nparry, cv2.IMREAD_COLOR)
+    period = datetime.datetime.now()
+
+    upload_frame_to_firebase(
+        img,
+        session["user"]["localId"],
+        period.strftime("%Y-%m-%d %H:%M:%S"),
+        folder="captures",
+    )
+
+    return "success"
 
 
 def gen_frames(user_id, user_email):

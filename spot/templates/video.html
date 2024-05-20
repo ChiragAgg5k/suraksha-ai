@@ -55,11 +55,42 @@
 			<div class="flex items-center justify-center w-full mt-8">
 				<div class="join">
 					<button class="btn bg-base-100 text-neutral/80 join-item">Record Video</button>
-					<button class="btn bg-base-100 text-neutral/80 join-item">Take Screenshot</button>
+					<button class="btn bg-base-100 text-neutral/80 join-item" onclick="capture();">
+						Take Screenshot
+					</button>
 					<button class="btn bg-base-100 text-neutral/80 join-item">Upload Frame</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script>
+	function capture() {
+		console.log("Capturing image...");
+		var img = document.getElementById("video-feed");
+		var canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, img.width, img.height);
+		var data = canvas.toDataURL("image/png");
+		fetch("/capture", {
+			method: "POST",
+			body: JSON.stringify({ img_data: data }),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+
+		console.log("Image captured.");
+	}
+</script>
+
 {% endblock %}
