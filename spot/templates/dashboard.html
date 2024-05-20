@@ -1,131 +1,130 @@
 {% extends "layout.html" %} {% block title %}Spot AI - Dashboard{% endblock %} {% block head %} {{ super() }} {%
-	endblock %} {% block content %}
-	
-	<div class="flex items-center justify-center mt-32">
-		
-		<form action="{{ url_for('clear_logs') }}" method="post">
-			<button type="submit" class="font-bold text-xl mb-2 btn btn-ghost active:text-black">Clear Logs</button>
-		</form>
+endblock %} {% block content %}
+
+<div class="flex flex-col relative mt-32 items-center justify-center">
+	{% if data != {} %}
+	<form action="{{ url_for('clear_logs') }}" method="post">
+		<button type="submit" class="font-bold text-md absolute top-0 right-8 mb-2 btn btn-sm active:text-black">
+			Clear Logs
+		</button>
+	</form>
+
+	<h2 class="font-bold text-xl mb-2">Logs Chart</h2>
+
+	<div class="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 mb-16">
+		<canvas id="myChart" width="400" height="400"></canvas>
 	</div>
-	
-	<div class="flex flex-col mt-32 items-center justify-center">
-		{% if data != {} %}
-		<h2 class="font-bold text-xl mb-2">Logs Chart</h2>
-	
-		<div class="w-full sm:w-4/5 md:w-3/4 lg:w-1/2 mb-16">
-			<canvas id="myChart" width="400" height="400"></canvas>
-		</div>
-		{% endif %} {% if data == {} %}
-		<div class="text-center">
-			<h2 class="font-bold text-xl mb-2 mt-16">No logs available</h2>
-			<p class="text-gray-500 text-sm">Make sure you have the Spot AI application running in the background.</p>
-		</div>
-		{% else %}
-		<h2 class="font-bold text-xl mb-2 mt-16">Current Logs</h2>
-		<div class="overflow-x-auto mb-16 h-[50vh] overflow-y-auto border p-4 rounded">
-			<table class="table table-xs">
-				<thead>
-					<tr>
-						<th>Object Name</th>
-						<th>Frequency</th>
-						<th>Max. Confidence</th>
-						<th>Min. Confidence</th>
-						<th>Time Stamp</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for key, value in data.items() %} {%for k, v in value.items() %}
-					<tr>
-						<td>{{k}}</td>
-						<td>{{v.freq}}</td>
-						<td>{{v.maxConfidence}}</td>
-						<td>{{v.minConfidence}}</td>
-						<td>{{v.time}}</td>
-					</tr>
-					{% endfor %} {% endfor %}
-				</tbody>
-			</table>
-		</div>
-		{% endif %}
+	{% endif %} {% if data == {} %}
+	<div class="text-center">
+		<h2 class="font-bold text-xl mb-2 mt-16">No logs available</h2>
+		<p class="text-gray-500 text-sm">
+			Are you sure you have started the Spot AI server? Please reach out to
+			<span class="underline">info@spot.ai</span> for any queries.
+		</p>
 	</div>
-	
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script>
-			function getRandomColor() {
-			  const letters = '0123456789ABCDEF';
-			  let color = '#';
-			  for (let i = 0; i < 6; i++) {
-				color += letters[Math.floor(Math.random() * 16)];
-			  }
-			  return color;
-			}
-	
-			function formatTime(milliseconds, timeZone = 'IST') {
-		  // Create a new Date object from the milliseconds
-		  const date = new Date(milliseconds);
-	
-		  // Get the day of the week, month, date, year, hours, minutes, and seconds
-		  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-		  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		  const dayOfWeek = daysOfWeek[date.getDay()];
-		  const day = date.getDate().toString().padStart(2, '0');
-		  const month = months[date.getMonth()];
-		  const year = date.getFullYear();
-		  const hours = date.getHours().toString().padStart(2, '0');
-		  const minutes = date.getMinutes().toString().padStart(2, '0');
-		  const seconds = date.getSeconds().toString().padStart(2, '0');
-	
-		  // Return the formatted time string
-		  return `${dayOfWeek}, ${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${timeZone}`;
+	{% else %}
+	<h2 class="font-bold text-xl mb-2 mt-16">Current Logs</h2>
+	<div class="overflow-x-auto mb-16 h-[50vh] overflow-y-auto border p-4 rounded">
+		<table class="table table-xs">
+			<thead>
+				<tr>
+					<th>Object Name</th>
+					<th>Frequency</th>
+					<th>Max. Confidence</th>
+					<th>Min. Confidence</th>
+					<th>Time Stamp</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for key, value in data.items() %} {%for k, v in value.items() %}
+				<tr>
+					<td>{{k}}</td>
+					<td>{{v.freq}}</td>
+					<td>{{v.maxConfidence}}</td>
+					<td>{{v.minConfidence}}</td>
+					<td>{{v.time}}</td>
+				</tr>
+				{% endfor %} {% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+		function getRandomColor() {
+		  const letters = '0123456789ABCDEF';
+		  let color = '#';
+		  for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		  }
+		  return color;
 		}
-	
-			const ctx = document.getElementById("myChart").getContext("2d");
-			data = {{data|tojson}};
-	
-			let labels = Object.keys(data).map((time) => formatTime(parseInt(time)));
-			let formattedData = {};
-	
-			   for (const [key, value] of Object.entries(data)) {
-	
-					   for(const [item, v] of Object.entries(value)){
-						   if (!(item in formattedData)) {
-							   formattedData[item] = [];
-						   }
+
+		function formatTime(milliseconds, timeZone = 'IST') {
+	  // Create a new Date object from the milliseconds
+	  const date = new Date(milliseconds);
+
+	  // Get the day of the week, month, date, year, hours, minutes, and seconds
+	  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	  const dayOfWeek = daysOfWeek[date.getDay()];
+	  const day = date.getDate().toString().padStart(2, '0');
+	  const month = months[date.getMonth()];
+	  const year = date.getFullYear();
+	  const hours = date.getHours().toString().padStart(2, '0');
+	  const minutes = date.getMinutes().toString().padStart(2, '0');
+	  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+	  // Return the formatted time string
+	  return `${dayOfWeek}, ${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${timeZone}`;
+	}
+
+		const ctx = document.getElementById("myChart").getContext("2d");
+		data = {{data|tojson}};
+
+		let labels = Object.keys(data).map((time) => formatTime(parseInt(time)));
+		let formattedData = {};
+
+		   for (const [key, value] of Object.entries(data)) {
+
+				   for(const [item, v] of Object.entries(value)){
+					   if (!(item in formattedData)) {
+						   formattedData[item] = [];
 					   }
-			   }
-	
-				  for (const [time, value] of Object.entries(data)) {
-							   for(const item in formattedData){
-									  if(item in value){
-										  formattedData[item].push(value[item].freq);
-									  }else{
-										  formattedData[item].push(0);
-									  }
+				   }
+		   }
+
+			  for (const [time, value] of Object.entries(data)) {
+						   for(const item in formattedData){
+								  if(item in value){
+									  formattedData[item].push(value[item].freq);
+								  }else{
+									  formattedData[item].push(0);
 								  }
-					   }
-	
-					   let datasets = [];
-							   for(const item in formattedData){
-								   datasets.push({
-									   label: item,
-									   data: formattedData[item],
-									   fill: false,
-									   borderColor: getRandomColor(),
-									   tension: 0.1
-								   });
-							   }
-	
-	
-			const myChart = new Chart(ctx,{
-				   type: 'line',
-				   data: {
-						  labels: labels,
-						  datasets: datasets
-					  },
-			   })
-	
-	
-	</script>
-	
-	{% endblock %}
-	
+							  }
+				   }
+
+				   let datasets = [];
+						   for(const item in formattedData){
+							   datasets.push({
+								   label: item,
+								   data: formattedData[item],
+								   fill: false,
+								   borderColor: getRandomColor(),
+								   tension: 0.1
+							   });
+						   }
+
+
+		const myChart = new Chart(ctx,{
+			   type: 'line',
+			   data: {
+					  labels: labels,
+					  datasets: datasets
+				  },
+		   })
+</script>
+
+{% endblock %}
