@@ -1,14 +1,17 @@
 import pyrebase
-from os import environ
+from dotenv import load_dotenv
+import os
+
+load_dotenv(".env")
 
 firebaseConfig = {
-    "apiKey": environ.get("FIREBASE_API_KEY"),
-    "authDomain": environ.get("FIREBASE_AUTH_DOMAIN"),
-    "projectId": environ.get("FIREBASE_PROJECT_ID"),
-    "storageBucket": environ.get("FIREBASE_STORAGE_BUCKET"),
-    "messagingSenderId": environ.get("FIREBASE_MESSAGING_SENDER_ID"),
-    "appId": environ.get("FIREBASE_APP_ID"),
-    "databaseURL": environ.get("FIREBASE_DATABASE_URL"),
+    "apiKey": os.getenv("FIREBASE_API_KEY"),
+    "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN"),
+    "projectId": os.getenv("FIREBASE_PROJECT_ID"),
+    "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET"),
+    "messagingSenderId": os.getenv("FIREBASE_MESSAGING_SENDER_ID"),
+    "appId": os.getenv("FIREBASE_APP_ID"),
+    "databaseURL": os.getenv("FIREBASE_DATABASE_URL"),
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
