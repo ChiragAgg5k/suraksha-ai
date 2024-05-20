@@ -10,11 +10,11 @@ import time
 from flask_mail import Mail, Message
 import os
 import threading
-import cv2
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 import base64
 import numpy as np
+import time
 
 # object classes
 classNames = [
@@ -509,6 +509,7 @@ def clear_logs():
     db.child("analytics").child(session["user"]["localId"]).remove()
 
     return redirect("dashboard")
+
 
 
 if __name__ == "__main__":
