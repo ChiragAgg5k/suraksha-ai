@@ -19,6 +19,8 @@ pytest = "^8.1.1"
 firebase = "^4.0.1"
 transformers = "^4.40.0"
 llmware = "^0.2.14"
+setuptools = "^72.1.0"
+python-dotenv = "^1.0.1"
 
 
 [build-system]
