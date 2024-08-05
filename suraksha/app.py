@@ -15,7 +15,7 @@ from flask_mail import Mail, Message
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from ultralytics import YOLO
 
-from suraksha.firebase.config import auth, db, storage
+from suraksha.services.firebase import auth, db, storage
 
 # object classes
 classNames = [
