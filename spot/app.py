@@ -1,20 +1,21 @@
-from ast import List
-from collections import defaultdict
+import base64
 import datetime
 import math
-from flask import Flask, redirect, render_template, Response, request, session
-import cv2
-from ultralytics import YOLO
-from firebase.config import auth, db, storage
-import time
-from flask_mail import Mail, Message
 import os
 import threading
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch
-import base64
-import numpy as np
 import time
+from ast import List
+from collections import defaultdict
+
+import cv2
+import numpy as np
+import torch
+from flask import Flask, Response, redirect, render_template, request, session
+from flask_mail import Mail, Message
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from ultralytics import YOLO
+
+from spot.firebase.config import auth, db, storage
 
 # object classes
 classNames = [
@@ -138,7 +139,7 @@ chat_bot_model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium
 
 def get_chat_response(text):
 
-    model_name = "phi-3-gguf"
+    chat_history_ids = torch.tensor([[tokenizer.bos_token_id]]).cuda()
 
     for step in range(5):
         new_user_input_ids = tokenizer.encode(
@@ -459,8 +460,11 @@ def signin():
             user = auth.sign_in_with_email_and_password(email, password)
             session["user"] = user
             return redirect("/profile")
-        except:
-            return render_template("signin.html", error="Invalid email or password")
+
+        except Exception as e:
+            return render_template(
+                "signin.html", error="Invalid email or password", error_message=str(e)
+            )
 
     return render_template("signin.html")
 
@@ -509,7 +513,6 @@ def clear_logs():
     db.child("analytics").child(session["user"]["localId"]).remove()
 
     return redirect("dashboard")
-
 
 
 if __name__ == "__main__":

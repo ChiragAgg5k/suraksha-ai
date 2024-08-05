@@ -28,9 +28,7 @@
 		{% else %}
 		<div class="flex flex-col bg-base-200 px-16 rounded-xl items-center justify-center w-full h-96">
 			<p class="text-center text-sm text-gray-600">Camera feed is paused. Click the play button to resume.</p>
-			<a
-				href="{{ url_for('video', camera_feed=true) }}"
-				id="play-button"
+			<a href="{{ url_for('video', camera_feed=true) }}" id="play-button"
 				class="text-xl mt-4 hover:text-neutral/80">
 				<i class="fa-solid fa-play"></i>
 			</a>
@@ -58,7 +56,7 @@
 					<button class="btn bg-base-100 text-neutral/80 join-item" onclick="download_ss();">
 						Take Screenshot
 					</button>
-					<button class="btn bg-base-100 text-neutral/80 join-item"  onclick="capture();">Upload Frame</button>
+					<button class="btn bg-base-100 text-neutral/80 join-item" onclick="capture();">Upload Frame</button>
 				</div>
 			</div>
 		</div>
@@ -93,32 +91,32 @@
 	}
 
 	function download_ss() {
-    console.log("Downloading image...");
-    var img = document.getElementById("video-feed");
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, img.width, img.height);
-    var data = canvas.toDataURL("image/png");
+		console.log("Downloading image...");
+		var img = document.getElementById("video-feed");
+		var canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, img.width, img.height);
+		var data = canvas.toDataURL("image/png");
 
-    var link = document.createElement('a');
-    link.href = data;
+		var link = document.createElement('a');
+		link.href = data;
 
-    var now = new Date();
-	var timestamp = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + '_' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds();
+		var now = new Date();
+		var timestamp = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + '_' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds();
 
-	link.download = timestamp + '.png';
+		link.download = timestamp + '.png';
 
 
-    document.body.appendChild(link);
+		document.body.appendChild(link);
 
-    link.click();
+		link.click();
 
-    document.body.removeChild(link);
+		document.body.removeChild(link);
 
-    console.log("Image captured and download started.");
-}
+		console.log("Image captured and download started.");
+	}
 </script>
 
 {% endblock %}

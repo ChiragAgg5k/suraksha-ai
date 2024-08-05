@@ -1,173 +1,158 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-	<head>
-		{% block head %}
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-		<title>{% block title %}{% endblock %}</title>
-		{% endblock %}
-		<link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" type="text/css" />
-		<script src="https://cdn.tailwindcss.com"></script>
 
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-			rel="stylesheet" />
-		<script src="https://kit.fontawesome.com/cbae3ce0e6.js" crossorigin="anonymous"></script>
-		<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-		<link rel="icon" href="{{ url_for('static', filename='logo.svg') }}" />
-	</head>
+<head>
+	{% block head %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+	<title>{% block title %}{% endblock %}</title>
+	{% endblock %}
+	<link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdn.tailwindcss.com"></script>
 
-	<body style="font-family: 'Poppins', sans-serif" class="relative">
-		<div class="h-screen absolute top-0 w-full">
-			<div class="fixed bottom-4 right-4 z-50 w-full max-w-sm h-fit">
-				<div class="collapse bg-base-200">
-					<input type="checkbox" />
-					<div class="collapse-title items-center justify-center flex text-md font-medium">
-						<div class="mr-4 text-xl">
-							<i class="fa-solid fa-robot"></i>
-						</div>
-						Chat with <span class="font-bold ml-2">SPOT-AI</span>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet" />
+	<script src="https://kit.fontawesome.com/cbae3ce0e6.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+	<link rel="icon" href="{{ url_for('static', filename='logo.svg') }}" />
+</head>
+
+<body style="font-family: 'Poppins', sans-serif" class="relative">
+	<div class="h-screen absolute top-0 w-full">
+		<div class="fixed bottom-4 right-4 z-50 w-full max-w-sm h-fit">
+			<div class="collapse bg-base-200">
+				<input type="checkbox" />
+				<div class="collapse-title items-center justify-center flex text-md font-medium">
+					<div class="mr-4 text-xl">
+						<i class="fa-solid fa-robot"></i>
 					</div>
-					<div class="collapse-content text-sm">
-						<div id="messageFormeight" class="mb-6 max-h-[16rem] overflow-y-scroll w-full">
-							<div class="chat chat-end">
-								<div class="chat-bubble">
-									Hello! I am SPOT-AI, your virtual assistant. How can I help you today?
-								</div>
-							</div>
-						</div>
-						<form id="messageArea" class="input-group">
-							<input
-								type="text"
-								id="text"
-								name="msg"
-								placeholder="Type your message..."
-								autocomplete="off"
-								class="form-control type_msg text-sm input input-bordered w-full"
-								required />
-						</form>
-					</div>
+					Chat with <span class="font-bold ml-2">SuRक्षा-AI</span>
 				</div>
-			</div>
-		</div>
-
-		<div class="drawer">
-			<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-			<div class="drawer-content flex flex-col">
-				<!-- Navbar -->
-				<div class="w-full fixed p-4 z-20">
-					<div class="w-full navbar shadow-xl bg-base-200 rounded-xl">
-						<div class="flex-none lg:hidden">
-							<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									class="inline-block w-6 h-6 stroke-current">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M4 6h16M4 12h16M4 18h16"></path>
-								</svg>
-							</label>
-						</div>
-						<div class="flex-1 px-2 mx-2 font-bold">
-							<a href="{{ url_for('index') }}" class="text-lg font-bold btn btn-sm btn-ghost">
-								<img src="{{ url_for('static', filename='logo.svg') }}" class="w-8 h-8" alt="logo" />
-								SPOT-AI
-							</a>
-						</div>
-						<div class="flex-none hidden lg:block">
-							<ul class="menu menu-horizontal">
-								<li>
-									<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black"
-										>Camera Feed</a
-									>
-								</li>
-								<li>
-									<a href="{{ url_for('dashboard') }}" class="btn btn-ghost active:text-black"
-										>Dashboard</a
-									>
-								</li>
-								<li>
-									<a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black"
-										>Profile</a
-									>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div id="content" class="z-0">{% block content %}{% endblock %}</div>
-			</div>
-			<div class="drawer-side z-50">
-				<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
-				<ul class="menu p-4 w-80 min-h-full bg-base-200 pt-8">
-					<div class="flex items-center justify-center mb-6 pb-6 border-neutral border-b">
-						<div class="avatar placeholder">
-							<div class="bg-base-300 border border-neutral rounded-full w-20">
-								<span class="text-2xl">c</span>
+				<div class="collapse-content text-sm">
+					<div id="messageFormeight" class="mb-6 max-h-[16rem] overflow-y-scroll w-full">
+						<div class="chat chat-end">
+							<div class="chat-bubble">
+								Hello! I am SuRक्षा-AI, your virtual assistant. How can I help you today?
 							</div>
 						</div>
 					</div>
-					<li>
-						<a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black">Profile</a>
-					</li>
-					<li>
-						<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black">Camera Feed</a>
-					</li>
-					<li>
-						<a href="{{ url_for('dashboard') }}" class="btn btn-ghost active:text-black">Dashboard</a>
-					</li>
-				</ul>
+					<form id="messageArea" class="input-group">
+						<input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off"
+							class="form-control type_msg text-sm input input-bordered w-full" required />
+					</form>
+				</div>
 			</div>
 		</div>
+	</div>
 
-		<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-		<script>
-			AOS.init({
-				duration: 1200
-			});
-		</script>
+	<div class="drawer">
+		<input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+		<div class="drawer-content flex flex-col">
+			<!-- Navbar -->
+			<div class="w-full fixed p-4 z-20">
+				<div class="w-full navbar shadow-xl bg-base-200 rounded-xl">
+					<div class="flex-none lg:hidden">
+						<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+								class="inline-block w-6 h-6 stroke-current">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									d="M4 6h16M4 12h16M4 18h16"></path>
+							</svg>
+						</label>
+					</div>
+					<div class="flex-1 px-2 mx-2 font-bold">
+						<a href="{{ url_for('index') }}" class="text-lg font-bold btn btn-sm btn-ghost">
+							<img src="{{ url_for('static', filename='logo.svg') }}" class="w-8 h-8" alt="logo" />
+							SuRक्षा
+						</a>
+					</div>
+					<div class="flex-none hidden lg:block">
+						<ul class="menu menu-horizontal">
+							<li>
+								<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black">Camera Feed</a>
+							</li>
+							<li>
+								<a href="{{ url_for('dashboard') }}"
+									class="btn btn-ghost active:text-black">Dashboard</a>
+							</li>
+							<li>
+								<a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black">Profile</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="content" class="z-0">{% block content %}{% endblock %}</div>
+		</div>
+		<div class="drawer-side z-50">
+			<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
+			<ul class="menu p-4 w-80 min-h-full bg-base-200 pt-8">
+				<div class="flex items-center justify-center mb-6 pb-6 border-neutral border-b">
+					<div class="avatar placeholder">
+						<div class="bg-base-300 border border-neutral rounded-full w-20">
+							<span class="text-2xl">c</span>
+						</div>
+					</div>
+				</div>
+				<li>
+					<a href="{{ url_for('profile') }}" class="btn btn-ghost active:text-black">Profile</a>
+				</li>
+				<li>
+					<a href="{{ url_for('video') }}" class="btn btn-ghost active:text-black">Camera Feed</a>
+				</li>
+				<li>
+					<a href="{{ url_for('dashboard') }}" class="btn btn-ghost active:text-black">Dashboard</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 
-		<script>
-			const messageForm = document.getElementById("messageFormeight");
-			const messageArea = document.getElementById("messageArea");
-			const text = document.getElementById("text");
-			const send = document.getElementById("send");
+	<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+	<script>
+		AOS.init({
+			duration: 1200
+		});
+	</script>
 
-			messageArea.addEventListener("submit", (e) => {
-				e.preventDefault();
-				const message = text.value;
-				const messageElement = document.createElement("div");
-				messageElement.classList.add("chat");
-				messageElement.classList.add("chat-start");
-				messageElement.innerHTML = `<div class="chat-bubble">${message}</div>`;
-				messageForm.appendChild(messageElement);
-				text.value = "";
-				messageForm.scrollTop = messageForm.scrollHeight;
+	<script>
+		const messageForm = document.getElementById("messageFormeight");
+		const messageArea = document.getElementById("messageArea");
+		const text = document.getElementById("text");
+		const send = document.getElementById("send");
 
-				fetch("/chat", {
-					method: "POST",
-					body: new URLSearchParams({
-						msg: message
-					})
+		messageArea.addEventListener("submit", (e) => {
+			e.preventDefault();
+			const message = text.value;
+			const messageElement = document.createElement("div");
+			messageElement.classList.add("chat");
+			messageElement.classList.add("chat-start");
+			messageElement.innerHTML = `<div class="chat-bubble">${message}</div>`;
+			messageForm.appendChild(messageElement);
+			text.value = "";
+			messageForm.scrollTop = messageForm.scrollHeight;
+
+			fetch("/chat", {
+				method: "POST",
+				body: new URLSearchParams({
+					msg: message
 				})
-					.then((response) => response.text())
-					.then((data) => {
-						const messageElement = document.createElement("div");
-						messageElement.classList.add("chat");
-						messageElement.classList.add("chat-end");
-						messageElement.innerHTML = `<div class="chat-bubble">${data}</div>`;
-						messageForm.appendChild(messageElement);
-						messageForm.scrollTop = messageForm.scrollHeight;
-					})
-					.catch((error) => {
-						console.error("Error:", error);
-					});
-			});
-		</script>
-	</body>
+			})
+				.then((response) => response.text())
+				.then((data) => {
+					const messageElement = document.createElement("div");
+					messageElement.classList.add("chat");
+					messageElement.classList.add("chat-end");
+					messageElement.innerHTML = `<div class="chat-bubble">${data}</div>`;
+					messageForm.appendChild(messageElement);
+					messageForm.scrollTop = messageForm.scrollHeight;
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+				});
+		});
+	</script>
+</body>
+
 </html>

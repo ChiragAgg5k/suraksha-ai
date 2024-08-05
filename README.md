@@ -34,12 +34,12 @@ SPOT AI is a security system powered by AI that works with current camera system
 
 SPOT AI is built with the following technologies:
 
--   [![Flask][Flask.com]][Flask.com]
--   [![Python][Python.com]][Python.com]
--   [![Firebase][Firebase.com]][Firebase.com]
--   [![Chart.js][Chart.js]][Chart.js]
--   [![Yolov8][Yolov8]][Yolov8]
--   [![Huggingface][Huggingface]][Huggingface]
+- [![Flask][Flask.com]][Flask.com]
+- [![Python][Python.com]][Python.com]
+- [![Firebase][Firebase.com]][Firebase.com]
+- [![Chart.js][Chart.js]][Chart.js]
+- [![Yolov8][Yolov8]][Yolov8]
+- [![Huggingface][Huggingface]][Huggingface]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -51,9 +51,9 @@ To start using SPOT AI, follow the steps below.
 
 You will need the following tools to get started:
 
--   **Python** - Follow the instructions [here](https://www.python.org/downloads/) to install Python.
+- **Python** - Follow the instructions [here](https://www.python.org/downloads/) to install Python.
 
--   **Poetry** - A tool for dependency management and packaging in Python. You can install it using the following command:
+- **Poetry** - A tool for dependency management and packaging in Python. You can install it using the following command:
 
 ```sh
 python3 -m pip install poetry
@@ -65,14 +65,15 @@ python3 -m pip install poetry
 
 ```sh
 cd path/to/directory
-git clone https://github.com/ChiragAgg5k/spot-ai
-cd spot-ai
+git clone https://github.com/ChiragAgg5k/suraksha
+cd suraksha
 ```
 
 1. Install the required dependencies using Poetry.
 
 ```sh
 poetry install
+poetry shell
 ```
 
 3. Create a new **Firebase** project and get the required credentials. You can follow the instructions [here](https://firebase.google.com/docs/web/setup)
@@ -83,7 +84,7 @@ poetry install
 6. Run the application.
 
 ```sh
-poetry run python src/app.py
+poetry run python -m spot.app
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -97,17 +98,17 @@ poetry run python src/app.py
 
 ## Features
 
--   **Object Detection**
-    Accurately detect and identify objects in the video stream.
-    <img src="assets/object_detection.png" alt="Object Detection" width="300" height="200">
+- **Object Detection**
+  Accurately detect and identify objects in the video stream.
+  <img src="assets/object_detection.png" alt="Object Detection" width="300" height="200">
 
--   **Camera Logs**
-    View the logs of the camera and the objects detected.
-    <img src="assets/logs.png" alt="Camera Logs" width="300" height="250">
+- **Camera Logs**
+  View the logs of the camera and the objects detected.
+  <img src="assets/logs.png" alt="Camera Logs" width="300" height="250">
 
--   **Chatbot**
-    Get notifications and alerts on your phone using the chatbot.
-    <img src="assets/chatbot.png" alt="Chatbot" width="300" height="300">
+- **Chatbot**
+  Get notifications and alerts on your phone using the chatbot.
+  <img src="assets/chatbot.png" alt="Chatbot" width="300" height="300">
 
 ## Contributing
 

@@ -53,78 +53,78 @@ endblock %} {% block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-		function getRandomColor() {
-		  const letters = '0123456789ABCDEF';
-		  let color = '#';
-		  for (let i = 0; i < 6; i++) {
+	function getRandomColor() {
+		const letters = '0123456789ABCDEF';
+		let color = '#';
+		for (let i = 0; i < 6; i++) {
 			color += letters[Math.floor(Math.random() * 16)];
-		  }
-		  return color;
 		}
-
-		function formatTime(milliseconds, timeZone = 'IST') {
-	  // Create a new Date object from the milliseconds
-	  const date = new Date(milliseconds);
-
-	  // Get the day of the week, month, date, year, hours, minutes, and seconds
-	  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-	  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-	  const dayOfWeek = daysOfWeek[date.getDay()];
-	  const day = date.getDate().toString().padStart(2, '0');
-	  const month = months[date.getMonth()];
-	  const year = date.getFullYear();
-	  const hours = date.getHours().toString().padStart(2, '0');
-	  const minutes = date.getMinutes().toString().padStart(2, '0');
-	  const seconds = date.getSeconds().toString().padStart(2, '0');
-
-	  // Return the formatted time string
-	  return `${dayOfWeek}, ${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${timeZone}`;
+		return color;
 	}
 
-		const ctx = document.getElementById("myChart").getContext("2d");
-		data = {{data|tojson}};
+	function formatTime(milliseconds, timeZone = 'IST') {
+		// Create a new Date object from the milliseconds
+		const date = new Date(milliseconds);
 
-		let labels = Object.keys(data).map((time) => formatTime(parseInt(time)));
-		let formattedData = {};
+		// Get the day of the week, month, date, year, hours, minutes, and seconds
+		const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		const dayOfWeek = daysOfWeek[date.getDay()];
+		const day = date.getDate().toString().padStart(2, '0');
+		const month = months[date.getMonth()];
+		const year = date.getFullYear();
+		const hours = date.getHours().toString().padStart(2, '0');
+		const minutes = date.getMinutes().toString().padStart(2, '0');
+		const seconds = date.getSeconds().toString().padStart(2, '0');
 
-		   for (const [key, value] of Object.entries(data)) {
+		// Return the formatted time string
+		return `${dayOfWeek}, ${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${timeZone}`;
+	}
 
-				   for(const [item, v] of Object.entries(value)){
-					   if (!(item in formattedData)) {
-						   formattedData[item] = [];
-					   }
-				   }
-		   }
+	const ctx = document.getElementById("myChart").getContext("2d");
+	data = {{ data | tojson }};
 
-			  for (const [time, value] of Object.entries(data)) {
-						   for(const item in formattedData){
-								  if(item in value){
-									  formattedData[item].push(value[item].freq);
-								  }else{
-									  formattedData[item].push(0);
-								  }
-							  }
-				   }
+	let labels = Object.keys(data).map((time) => formatTime(parseInt(time)));
+	let formattedData = {};
 
-				   let datasets = [];
-						   for(const item in formattedData){
-							   datasets.push({
-								   label: item,
-								   data: formattedData[item],
-								   fill: false,
-								   borderColor: getRandomColor(),
-								   tension: 0.1
-							   });
-						   }
+	for (const [key, value] of Object.entries(data)) {
+
+		for (const [item, v] of Object.entries(value)) {
+			if (!(item in formattedData)) {
+				formattedData[item] = [];
+			}
+		}
+	}
+
+	for (const [time, value] of Object.entries(data)) {
+		for (const item in formattedData) {
+			if (item in value) {
+				formattedData[item].push(value[item].freq);
+			} else {
+				formattedData[item].push(0);
+			}
+		}
+	}
+
+	let datasets = [];
+	for (const item in formattedData) {
+		datasets.push({
+			label: item,
+			data: formattedData[item],
+			fill: false,
+			borderColor: getRandomColor(),
+			tension: 0.1
+		});
+	}
 
 
-		const myChart = new Chart(ctx,{
-			   type: 'line',
-			   data: {
-					  labels: labels,
-					  datasets: datasets
-				  },
-		   })
+	const myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: datasets
+		},
+	})
 </script>
 
 {% endblock %}
