@@ -4,7 +4,7 @@
     <img src="assets/logo.svg" alt="Logo" width="120" height="120">
   </a>
 
-  <h3 align="center">SPOT AI</h3>
+  <h3 align="center">SuRक्षा</h3>
 
   <p align="center">
     The ultimate AI powered Home Security and Surveillance System
@@ -26,13 +26,13 @@
 
 ![Thumbnail](assets/thumbnail.png)
 
-SPOT AI is a security system powered by AI that works with current camera systems to offer sophisticated video analytics, detect threats, and provide intelligent monitoring features. The system utilizes computer vision and deep learning methods to analyze video streams, allowing for functionalities like identifying objects, tracking motion, detecting anomalies, and recognizing fires.
+SuRक्षा is a security system powered by AI that works with current camera systems to offer sophisticated video analytics, detect threats, and provide intelligent monitoring features. The system utilizes computer vision and deep learning methods to analyze video streams, allowing for functionalities like identifying objects, tracking motion, detecting anomalies, and recognizing fires.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-SPOT AI is built with the following technologies:
+SuRक्षा is built with the following technologies:
 
 - [![Flask][Flask.com]][Flask.com]
 - [![Python][Python.com]][Python.com]
@@ -45,7 +45,7 @@ SPOT AI is built with the following technologies:
 
 ## Getting Started
 
-To start using SPOT AI, follow the steps below.
+To start using SuRक्षा, follow the steps below.
 
 ### Prerequisites
 
@@ -84,7 +84,7 @@ poetry shell
 6. Run the application.
 
 ```sh
-poetry run python -m spot.app
+poetry run python -m suraksha.app
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

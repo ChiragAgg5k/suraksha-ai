@@ -1,5 +1,5 @@
 import pytest
-from spot import app
+from suraksha import app
 
 
 @pytest.fixture()

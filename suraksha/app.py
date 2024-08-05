@@ -15,7 +15,7 @@ from flask_mail import Mail, Message
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from ultralytics import YOLO
 
-from spot.firebase.config import auth, db, storage
+from suraksha.firebase.config import auth, db, storage
 
 # object classes
 classNames = [
@@ -330,7 +330,7 @@ def gen_frames(user_id, user_email):
                             f"If you have any questions or concerns, please contact the security team.\n\n"
                             f"Thank you for your prompt attention to this matter.\n\n"
                             f"Regards,\n"
-                            f"SPOT AI",
+                            f"SuRक्षा AI",
                             "Security Alert: Unauthorized Object Detected",
                             user_email,
                             [user_email],

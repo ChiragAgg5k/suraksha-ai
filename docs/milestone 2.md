@@ -2,25 +2,25 @@
 
 ## Project Title
 
-Secure and Personal Organizing Technology AI (SPOT AI)
+SuRक्षा - AI Powered Home Security and Surveillance System
 
 ## User Interface Design [prototype].
 
-The goal of the user-centric SPOT AI project is to improve user security and safety by utilizing their current security camera equipment. The project's design is founded on the concepts of User-Centered Design (UCD), which give the end-user's wants, preferences, and behaviors first priority throughout the development process. The following key factors demonstrate how SPOT AI satisfies UCD requirements:
+The goal of the user-centric SuRक्षा project is to improve user security and safety by utilizing their current security camera equipment. The project's design is founded on the concepts of User-Centered Design (UCD), which give the end-user's wants, preferences, and behaviors first priority throughout the development process. The following key factors demonstrate how SuRक्षा satisfies UCD requirements:
 
-1. **User study and Understanding**: A great deal of study has been done to learn about the security apprehensions, problems, and expectations of the target users regarding such a system. This data is essential for determining SPOT AI's features, operations, and user interface.
+1. **User study and Understanding**: A great deal of study has been done to learn about the security apprehensions, problems, and expectations of the target users regarding such a system. This data is essential for determining SuRक्षा's features, operations, and user interface.
 
-2. **Iterative Design method**: A constant method of gathering user feedback and integrating it into the design is used in the development of SPOT AI. This methodology guarantees that the system develops according to real user requirements and preferences, as opposed to conjecture.
+2. **Iterative Design method**: A constant method of gathering user feedback and integrating it into the design is used in the development of SuRक्षा. This methodology guarantees that the system develops according to real user requirements and preferences, as opposed to conjecture.
 
-3. **Usability Testing**: To detect any usability problems, assess how intuitive the user interface is, and obtain input for enhancements, regular usability testing sessions are carried out with representative users. This guarantees a seamless user experience and makes SPOT AI easy to use.
+3. **Usability Testing**: To detect any usability problems, assess how intuitive the user interface is, and obtain input for enhancements, regular usability testing sessions are carried out with representative users. This guarantees a seamless user experience and makes SuRक्षा easy to use.
 
-4. **Multi-platform Accessibility**: SPOT AI accommodates customers' varied needs and preferences by providing a smartphone app for real-time updates and a web app for operating the cameras and a dashboard. This ensures accessibility across several platforms.
+4. **Multi-platform Accessibility**: SuRक्षा accommodates customers' varied needs and preferences by providing a smartphone app for real-time updates and a web app for operating the cameras and a dashboard. This ensures accessibility across several platforms.
 
-5. **Personalization and Customization**: Users can configure detection preferences, create custom alarms, and edit the user interface to suit their tastes by customizing and personalizing SPOT AI to meet their unique needs.
+5. **Personalization and Customization**: Users can configure detection preferences, create custom alarms, and edit the user interface to suit their tastes by customizing and personalizing SuRक्षा to meet their unique needs.
 
-6. **Easy and Seamless Integration**: SPOT AI is made to work with consumers' current security camera configurations in an intuitive and seamless manner, reducing the need for complicated installs or extra hardware. This user-centric strategy improves the entire user experience and lowers adoption obstacles.
+6. **Easy and Seamless Integration**: SuRक्षा is made to work with consumers' current security camera configurations in an intuitive and seamless manner, reducing the need for complicated installs or extra hardware. This user-centric strategy improves the entire user experience and lowers adoption obstacles.
 
-7. **Continual Improvement**: In order to make sure that SPOT AI stays applicable, efficient, and user-friendly over time, it was designed with the idea of continual improvement. User feedback and developing technologies are incorporated into the system.
+7. **Continual Improvement**: In order to make sure that SuRक्षा stays applicable, efficient, and user-friendly over time, it was designed with the idea of continual improvement. User feedback and developing technologies are incorporated into the system.
 
 8. **Design Consistency**: To provide a seamless experience across different components, a unified design system is followed with consistent patterns for visuals, interactions and terminology.
 
@@ -127,7 +127,7 @@ Rating - 9/10
 ## Design Documents
 
 - **Use Case Diagram**
-  The primary features of the SPOT AI system and user interactions are depicted in the use case diagram. The main player is the user, who has the ability to log in, set up CCTV cameras, access the admin dashboard, and use the mobile app.
+  The primary features of the SuRक्षा system and user interactions are depicted in the use case diagram. The main player is the user, who has the ability to log in, set up CCTV cameras, access the admin dashboard, and use the mobile app.
 
   Use cases illustrate the main features of the system, such as object, anomaly, and fire detection; they also show how to receive real-time updates; interact with the chatbot; and visualize data.
 
@@ -138,7 +138,7 @@ Rating - 9/10
 ![Use Case Diagram](./use-case-diagram.png)
 
 - **Activity Diagram**
-  The overall flow and exchanges between the user, the SPOT AI system, and security staff are depicted in the activity diagram. Initially, the user needs to log in with their existing account or create a new one in order to use the system.
+  The overall flow and exchanges between the user, the SuRक्षा system, and security staff are depicted in the activity diagram. Initially, the user needs to log in with their existing account or create a new one in order to use the system.
 
   The user chooses and configures the camera settings if they choose to configure CCTV cameras. At that point, the system simultaneously detects flames, anomalies, and objects. In addition, it provides updates, processes data in real time, and updates the admin dashboard and mobile app.
 
@@ -151,7 +151,7 @@ Rating - 9/10
 ![Activity Diagram](./activity-diagram.png)
 
 - **Class Diagram**
-  Users, cameras, and incidents are managed by the central `SPOTAISystem` class.
+  Users, cameras, and incidents are managed by the central `SuRक्षाSystem` class.
 
   Individual CCTV cameras are represented by the `Camera` class, which stores data about them such as location, settings, and camera ID. Its techniques for identifying items, irregularities, and fires allow the system to perform its essential surveillance functions.
 
@@ -165,7 +165,7 @@ Rating - 9/10
 
   Camera locations and setup settings are managed using classes such as `Location` and `CameraSettings`.
 
-  The connections between classes show how different parts work together and rely on one another. For example, the composition connection between {SPOTAISystem} and {Camera} indicates that the system has more than one camera.
+  The connections between classes show how different parts work together and rely on one another. For example, the composition connection between {SuRक्षाSystem} and {Camera} indicates that the system has more than one camera.
 
 ![Class Diagram](./class-diagram.png)
 
@@ -343,7 +343,7 @@ https://www.linkedin.com/posts/chiragagg5k_artificialintelligence-surveillance-s
 
 ## Patent Research
 
-Given that our SPOT AI research seems to incorporate unique and non-obvious technical breakthroughs, it can definitely qualify for a patent. We might be able to patent the combination of AI-powered object detection, anomaly detection, fire detection, real-time updates, and a chatbot interface for engaging with CCTV camera data.
+Given that our SuRक्षा research seems to incorporate unique and non-obvious technical breakthroughs, it can definitely qualify for a patent. We might be able to patent the combination of AI-powered object detection, anomaly detection, fire detection, real-time updates, and a chatbot interface for engaging with CCTV camera data.
 
 We should perform a comprehensive prior art search before filing for a patent to make sure that our idea is actually original and has not been anticipated by already developed technology. To help our team navigate the patent application process, which usually entails producing a comprehensive specification, claims, and supporting documentation, we need to speak with a patent attorney or agent.
 

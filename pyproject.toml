@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "spot"
+name = "suraksha"
 version = "0.8.5"
-description = "SPOT AI provides smart security surveillance solutions such as face recognition, object detection, and more."
+description = "SuRक्षा provides smart security surveillance solutions such as face recognition, object detection, and more."
 authors = ["ChiragAgg5k <110609663+ChiragAgg5k@users.noreply.github.com>"]
 readme = "README.md"
 
