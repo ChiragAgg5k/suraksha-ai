@@ -1,5 +1,6 @@
 import base64
 import datetime
+import json
 import math
 import os
 import threading
@@ -17,104 +18,14 @@ from ultralytics import YOLO
 
 from suraksha.services.firebase import auth, db, storage
 
-# object classes
-classNames = [
-    "person",
-    "bicycle",
-    "car",
-    "motorbike",
-    "aeroplane",
-    "bus",
-    "train",
-    "truck",
-    "boat",
-    "traffic light",
-    "fire hydrant",
-    "stop sign",
-    "parking meter",
-    "bench",
-    "bird",
-    "cat",
-    "dog",
-    "horse",
-    "sheep",
-    "cow",
-    "elephant",
-    "bear",
-    "zebra",
-    "giraffe",
-    "backpack",
-    "umbrella",
-    "handbag",
-    "tie",
-    "suitcase",
-    "frisbee",
-    "skis",
-    "snowboard",
-    "sports ball",
-    "kite",
-    "baseball bat",
-    "baseball glove",
-    "skateboard",
-    "surfboard",
-    "tennis racket",
-    "bottle",
-    "wine glass",
-    "cup",
-    "fork",
-    "knife",
-    "spoon",
-    "bowl",
-    "banana",
-    "apple",
-    "sandwich",
-    "orange",
-    "broccoli",
-    "carrot",
-    "hot dog",
-    "pizza",
-    "donut",
-    "cake",
-    "chair",
-    "sofa",
-    "pottedplant",
-    "bed",
-    "diningtable",
-    "toilet",
-    "tvmonitor",
-    "laptop",
-    "mouse",
-    "remote",
-    "keyboard",
-    "cell phone",
-    "microwave",
-    "oven",
-    "toaster",
-    "sink",
-    "refrigerator",
-    "book",
-    "clock",
-    "vase",
-    "scissors",
-    "teddy bear",
-    "hair drier",
-    "toothbrush",
-]
 
-THREAT_OBJECTS = [
-    "knife",
-    "fork",  # for demonstration purposes
-    "gun",
-    "firearm",
-    "rifle",
-    "pistol",
-    "revolver",
-    "shotgun",
-    "fire",
-    "bomb",
-    "explosive",
-    "cell phone",
-]
+classNames = []
+thread_objects = []
+json_path = os.path.join(os.path.dirname(__file__), "data", "detection_classes.json")
+with open(json_path, "r") as f:
+    data = json.load(f)
+    classNames = data["class_names"]
+    thread_objects = data["threat_objects"]
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -307,10 +218,10 @@ def gen_frames(user_id, user_email):
 
                 color = (255, 0, 0)
 
-                if cls_name in THREAT_OBJECTS:
+                if cls_name in thread_objects:
                     color = (0, 0, 255)
 
-                if cls_name in THREAT_OBJECTS and not email_sent:
+                if cls_name in thread_objects and not email_sent:
                     with app.app_context():
 
                         upload_frame_to_firebase(
