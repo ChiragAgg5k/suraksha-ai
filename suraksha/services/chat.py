@@ -13,8 +13,15 @@ def get_firebase_data(user_id, query_time=None):
     if query_time is None:
         query_time = datetime.datetime.now()
     
+    if isinstance(query_time, str):
+        try:
+            query_time = datetime.datetime.strptime(query_time, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            query_time = datetime.datetime.now()
+    
     query_time_millis = int(time.mktime(query_time.timetuple()) * 1000)
     
+    # Query Firebase for analytics data
     analytics_data = db.child("analytics").child(user_id).order_by_key().end_at(str(query_time_millis)).limit_to_last(1).get().val()
     
     if analytics_data:
