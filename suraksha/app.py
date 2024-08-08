@@ -10,13 +10,13 @@ from collections import defaultdict
 
 import cv2
 import numpy as np
-import torch
 from flask import Flask, Response, redirect, render_template, request, session
 from flask_mail import Mail, Message
-from transformers import AutoModelForCausalLM, AutoTokenizer
 from ultralytics import YOLO
 
 from suraksha.services.firebase import auth, db, storage
+from suraksha.config import config
+from suraksha.services.chat import get_chat_response
 
 
 classNames = []
@@ -27,57 +27,37 @@ with open(json_path, "r") as f:
     classNames = data["class_names"]
     thread_objects = data["threat_objects"]
 
-# Initialize the Flask app
 app = Flask(__name__)
 app.secret_key = "secret"
 app.app_context().push()
 
-app.config["MAIL_SERVER"] = "sandbox.smtp.mailtrap.io"
-app.config["MAIL_PORT"] = 2525
-app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
-app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_SERVER"] = config.MAIL_SERVER
+app.config["MAIL_PORT"] = config.MAIL_PORT
+app.config["MAIL_USERNAME"] = config.MAIL_USERNAME
+app.config["MAIL_PASSWORD"] = config.MAIL_PASSWORD
+app.config["MAIL_USE_TLS"] = config.MAIL_USE_TLS
+app.config["MAIL_USE_SSL"] = config.MAIL_USE_SSL
 
 model = YOLO("yolov8n.pt")
 mail = Mail(app)
-
-tokenizer = AutoTokenizer.from_pretrained(
-    "microsoft/DialoGPT-medium", padding_size="left"
-)
-chat_bot_model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
-
-
-def get_chat_response(text):
-
-    chat_history_ids = torch.tensor([[tokenizer.bos_token_id]]).cuda()
-
-    for step in range(5):
-        new_user_input_ids = tokenizer.encode(
-            str(text) + tokenizer.eos_token, return_tensors="pt"
-        )
-
-        bot_input_ids = (
-            torch.cat([chat_history_ids, new_user_input_ids], dim=-1)
-            if step > 0
-            else new_user_input_ids
-        )
-
-        chat_history_ids = chat_bot_model.generate(
-            bot_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id
-        )
-
-        return tokenizer.decode(
-            chat_history_ids[:, bot_input_ids.shape[-1] :][0],
-            skip_special_tokens=True,
-        )
 
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
     msg = request.form["msg"]
-    input = msg
-    return get_chat_response(input)
+    user_id = session.get('user', {}).get('localId')
+    
+    if not user_id:
+        return "Please log in to use the chat feature."
+    
+    conversation_history = session.get('conversation_history', [])
+    
+    response, updated_history = get_chat_response(msg, conversation_history, user_id)
+    
+    # Store the updated conversation history in the session
+    session['conversation_history'] = updated_history
+    
+    return response
 
 
 def send_email(msg, subject, sender, recipients):

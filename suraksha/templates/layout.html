@@ -33,7 +33,7 @@
 				<div class="collapse-content text-sm">
 					<div id="messageFormeight" class="mb-6 max-h-[16rem] overflow-y-scroll w-full">
 						<div class="chat chat-end">
-							<div class="chat-bubble">
+							<div class="text-sm chat-bubble">
 								Hello! I am SuRक्षा-AI, your virtual assistant. How can I help you today?
 							</div>
 						</div>
@@ -128,7 +128,7 @@
 			const messageElement = document.createElement("div");
 			messageElement.classList.add("chat");
 			messageElement.classList.add("chat-start");
-			messageElement.innerHTML = `<div class="chat-bubble">${message}</div>`;
+			messageElement.innerHTML = `<div class="chat-bubble text-sm">${message}</div>`;
 			messageForm.appendChild(messageElement);
 			text.value = "";
 			messageForm.scrollTop = messageForm.scrollHeight;
@@ -144,7 +144,7 @@
 					const messageElement = document.createElement("div");
 					messageElement.classList.add("chat");
 					messageElement.classList.add("chat-end");
-					messageElement.innerHTML = `<div class="chat-bubble">${data}</div>`;
+					messageElement.innerHTML = `<div class="chat-bubble text-sm">${data}</div>`;
 					messageForm.appendChild(messageElement);
 					messageForm.scrollTop = messageForm.scrollHeight;
 				})

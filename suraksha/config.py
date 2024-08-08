@@ -30,5 +30,7 @@ class Config:
         "DIALOGPT_MODEL_NAME", "microsoft/DialoGPT-medium"
     )
 
+    KRUTRIM_SECRET_KEY = os.environ.get("KRUTRIM_SECRET_KEY")
+
 
 config = Config()
