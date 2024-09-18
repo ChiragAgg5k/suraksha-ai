@@ -1,0 +1,15 @@
+ultralytics==8.1.11
+torch==2.2.0
+torchvision==0.17.0
+torchaudio==2.2.0
+flask==3.0.2
+flask-mail==0.9.1
+pyrebase4==4.7.1
+black==24.4.0
+pytest==8.1.1
+firebase==4.0.1
+transformers==4.40.0
+llmware==0.2.14
+setuptools==72.1.0
+python-dotenv==1.0.1
+openai==1.40.1
