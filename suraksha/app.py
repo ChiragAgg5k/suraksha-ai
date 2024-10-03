@@ -61,8 +61,11 @@ def chat():
 
 
 def send_email(msg, subject, sender, recipients):
-    msg = Message(subject, sender=sender, recipients=recipients, body=msg)
-    mail.send(msg)
+    try:
+        msg = Message(subject, sender=sender, recipients=recipients, body=msg)
+        mail.send(msg)
+    except Exception as e:
+        print(e)
 
 
 def send_email_in_thread(msg, subject, sender, recipients):
@@ -145,133 +148,124 @@ def capture():
 
 def gen_frames(user_id, user_email):
     camera = cv2.VideoCapture(0)
-    next_time = datetime.datetime.now()
-    delta = datetime.timedelta(seconds=30)
-    objectData = {}  # person -> {freq, maxConfidence, minConfidence}
+    next_analytics_time = datetime.datetime.now()
+    next_detection_time = datetime.datetime.now()
+    analytics_delta = datetime.timedelta(seconds=30)
+    detection_delta = datetime.timedelta(milliseconds=100)  # Adjust as needed
+    objectData = {}
     email_sent = False
+    last_detection_results = None
+
+    # Optimize camera settings
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    camera.set(cv2.CAP_PROP_FPS, 30)
 
     while True:
-        period = datetime.datetime.now()
-
+        current_time = datetime.datetime.now()
         success, frame = camera.read()
+        
+        if not success:
+            break
+
         frame = cv2.flip(frame, 1)
-        results = model(frame, stream=True, verbose=False)
+        output_frame = frame.copy()
 
-        objectsFreq = defaultdict(List)
+        # Only run detection periodically
+        if current_time >= next_detection_time:
+            results = model(frame, stream=True, verbose=False)
+            last_detection_results = results
+            next_detection_time = current_time + detection_delta
+        
+        objectsFreq = defaultdict(list)
 
-        # coordinates
-        for r in results:
-            boxes = r.boxes
+        if last_detection_results:
+            for r in last_detection_results:
+                boxes = r.boxes
 
-            for box in boxes:
-                # bounding box
-                x1, y1, x2, y2 = box.xyxy[0]
-                x1, y1, x2, y2 = (
-                    int(x1),
-                    int(y1),
-                    int(x2),
-                    int(y2),
-                )  # convert to int values
+                for box in boxes:
+                    # bounding box
+                    x1, y1, x2, y2 = box.xyxy[0]
+                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-                # put box in cam
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 255), 3)
+                    confidence = math.ceil((box.conf[0] * 100)) / 100
 
-                # confidence
-                confidence = math.ceil((box.conf[0] * 100)) / 100
+                    if confidence < 0.5:
+                        continue
 
-                if confidence < 0.5:
-                    continue
+                    cls = int(box.cls[0])
+                    cls_name = classNames[cls]
 
-                # class name
-                cls = int(box.cls[0])
-                cls_name = classNames[cls]
+                    # Draw rectangle and text
+                    color = (0, 0, 255) if cls_name in thread_objects else (255, 0, 0)
+                    cv2.rectangle(output_frame, (x1, y1), (x2, y2), color, 2)
+                    cv2.putText(
+                        output_frame,
+                        f"{cls_name} {confidence * 100:.1f}%",
+                        (x1, y1),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5,  # Reduced font size for better performance
+                        color,
+                        2
+                    )
 
-                if cls_name in objectsFreq:
                     objectsFreq[cls_name].append(confidence)
-                else:
-                    objectsFreq[cls_name] = [confidence]
 
-                # object details
-                org = [x1, y1]
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                fontScale = 1
-
-                color = (255, 0, 0)
-
-                if cls_name in thread_objects:
-                    color = (0, 0, 255)
-
-                if cls_name in thread_objects and not email_sent:
-                    with app.app_context():
-
-                        upload_frame_to_firebase(
-                            frame, user_id, period.strftime("%Y-%m-%d %H:%M:%S")
+                    # Handle threat object detection and email
+                    if cls_name in thread_objects and not email_sent:
+                        email_thread = threading.Thread(
+                            target=handle_threat_detection,
+                            args=(frame, user_id, user_email, cls_name, confidence, current_time)
                         )
-
-                        send_email_in_thread(
-                            f"Security Alert: Unauthorized Object Detected\n\n"
-                            f"Object: {cls_name.capitalize()}\n"
-                            f"Detection Time: {period.strftime('%Y-%m-%d %H:%M:%S')}\n"
-                            f"Confidence Level: {confidence * 100:.1f}%\n\n"
-                            f"Description:\n"
-                            f"The object '{cls_name}' was detected by our security system at the specified time and location. "
-                            f"The detection was made with a confidence level of {confidence * 100:.1f}%. "
-                            f"Please review the attached image for visual confirmation and take necessary action.\n\n"
-                            f"This is an automated alert generated by our security monitoring system. "
-                            f"If you have any questions or concerns, please contact the security team.\n\n"
-                            f"Thank you for your prompt attention to this matter.\n\n"
-                            f"Regards,\n"
-                            f"SuRक्षा AI",
-                            "Security Alert: Unauthorized Object Detected",
-                            user_email,
-                            [user_email],
-                        )
+                        email_thread.start()
                         email_sent = True
 
-                thickness = 2
-
-                cv2.putText(
-                    frame,
-                    f"{classNames[cls]} {confidence * 100:.1f}%",
-                    org,
-                    font,
-                    fontScale,
-                    color,
-                    thickness,
-                )
-
-            for obj in objectsFreq:
-                if obj in objectData:
-                    objectData[obj]["freq"] = max(
-                        objectData[obj]["freq"], len(objectsFreq[obj])
-                    )
-                    objectData[obj]["maxConfidence"] = max(
-                        objectData[obj]["maxConfidence"], max(objectsFreq[obj])
-                    )
-                    objectData[obj]["minConfidence"] = min(
-                        objectData[obj]["minConfidence"], min(objectsFreq[obj])
-                    )
-
-                else:
-                    objectData[obj] = {
-                        "freq": len(objectsFreq[obj]),
-                        "maxConfidence": max(objectsFreq[obj]),
-                        "minConfidence": min(objectsFreq[obj]),
-                        "time": period.strftime("%Y-%m-%d %H:%M:%S"),
-                    }
-
-        if period >= next_time:
-            next_time += delta
+        # Handle analytics
+        if current_time >= next_analytics_time:
+            update_analytics(objectsFreq, objectData, current_time)
             send_analytics(objectData, user_id)
             objectData = {}
             email_sent = False
+            next_analytics_time = current_time + analytics_delta
 
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode(".jpg", frame)
-            frame = buffer.tobytes()
-            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
+        # Convert frame to bytes and yield
+        ret, buffer = cv2.imencode('.jpg', output_frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        frame_bytes = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+
+def handle_threat_detection(frame, user_id, user_email, cls_name, confidence, timestamp):
+    with app.app_context():
+        upload_frame_to_firebase(frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+        send_email(
+            f"Security Alert: Unauthorized Object Detected\n\n"
+            f"Object: {cls_name.capitalize()}\n"
+            f"Detection Time: {timestamp.strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"Confidence Level: {confidence * 100:.1f}%\n\n"
+            f"Description:\n"
+            f"The object '{cls_name}' was detected by our security system. "
+            f"Please review the uploaded image for visual confirmation.\n\n"
+            f"This is an automated alert.\n\n"
+            f"Regards,\nSuRक्षा AI",
+            "Security Alert: Unauthorized Object Detected",
+            user_email,
+            [user_email]
+        )
+
+def update_analytics(objectsFreq, objectData, current_time):
+    for obj, confidences in objectsFreq.items():
+        if confidences:
+            if obj in objectData:
+                objectData[obj]["freq"] = max(objectData[obj]["freq"], len(confidences))
+                objectData[obj]["maxConfidence"] = max(objectData[obj]["maxConfidence"], max(confidences))
+                objectData[obj]["minConfidence"] = min(objectData[obj]["minConfidence"], min(confidences))
+            else:
+                objectData[obj] = {
+                    "freq": len(confidences),
+                    "maxConfidence": max(confidences),
+                    "minConfidence": min(confidences),
+                    "time": current_time.strftime("%Y-%m-%d %H:%M:%S"),
+                }
 
 
 @app.route("/")
