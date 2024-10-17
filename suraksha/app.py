@@ -5,7 +5,6 @@ import math
 import os
 import threading
 import time
-from ast import List
 from collections import defaultdict
 
 import cv2
@@ -38,25 +37,27 @@ app.config["MAIL_PASSWORD"] = config.MAIL_PASSWORD
 app.config["MAIL_USE_TLS"] = config.MAIL_USE_TLS
 app.config["MAIL_USE_SSL"] = config.MAIL_USE_SSL
 
-model = YOLO("yolov8n.pt")
+model = YOLO("yolo11n.pt")
 mail = Mail(app)
 
+conversation_histories = {}
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
     msg = request.form["msg"]
-    user_id = session.get('user', {}).get('localId')
-    
+    user_id = session.get("user", {}).get("localId")
+
     if not user_id:
         return "Please log in to use the chat feature."
-    
-    conversation_history = session.get('conversation_history', [])
-    
+
+    # Reset conversation history for this user on each request
+    conversation_history = []
+
     response, updated_history = get_chat_response(msg, conversation_history, user_id)
-    
-    # Store the updated conversation history in the session
-    session['conversation_history'] = updated_history
-    
+
+    # Store the updated conversation history in the global variable
+    conversation_histories[user_id] = updated_history
+
     return response
 
 
@@ -151,7 +152,7 @@ def gen_frames(user_id, user_email):
     next_analytics_time = datetime.datetime.now()
     next_detection_time = datetime.datetime.now()
     analytics_delta = datetime.timedelta(seconds=30)
-    detection_delta = datetime.timedelta(milliseconds=100)  # Adjust as needed
+    detection_delta = datetime.timedelta(milliseconds=10)  # Adjust as needed
     objectData = {}
     email_sent = False
     last_detection_results = None
@@ -164,7 +165,7 @@ def gen_frames(user_id, user_email):
     while True:
         current_time = datetime.datetime.now()
         success, frame = camera.read()
-        
+
         if not success:
             break
 
@@ -176,7 +177,7 @@ def gen_frames(user_id, user_email):
             results = model(frame, stream=True, verbose=False)
             last_detection_results = results
             next_detection_time = current_time + detection_delta
-        
+
         objectsFreq = defaultdict(list)
 
         if last_detection_results:
@@ -206,7 +207,7 @@ def gen_frames(user_id, user_email):
                         cv2.FONT_HERSHEY_SIMPLEX,
                         0.5,  # Reduced font size for better performance
                         color,
-                        2
+                        2,
                     )
 
                     objectsFreq[cls_name].append(confidence)
@@ -215,7 +216,14 @@ def gen_frames(user_id, user_email):
                     if cls_name in thread_objects and not email_sent:
                         email_thread = threading.Thread(
                             target=handle_threat_detection,
-                            args=(frame, user_id, user_email, cls_name, confidence, current_time)
+                            args=(
+                                frame,
+                                user_id,
+                                user_email,
+                                cls_name,
+                                confidence,
+                                current_time,
+                            ),
                         )
                         email_thread.start()
                         email_sent = True
@@ -229,14 +237,20 @@ def gen_frames(user_id, user_email):
             next_analytics_time = current_time + analytics_delta
 
         # Convert frame to bytes and yield
-        ret, buffer = cv2.imencode('.jpg', output_frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        ret, buffer = cv2.imencode(".jpg", output_frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
         frame_bytes = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        yield (
+            b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame_bytes + b"\r\n"
+        )
 
-def handle_threat_detection(frame, user_id, user_email, cls_name, confidence, timestamp):
+
+def handle_threat_detection(
+    frame, user_id, user_email, cls_name, confidence, timestamp
+):
     with app.app_context():
-        upload_frame_to_firebase(frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+        upload_frame_to_firebase(
+            frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        )
         send_email(
             f"Security Alert: Unauthorized Object Detected\n\n"
             f"Object: {cls_name.capitalize()}\n"
@@ -249,16 +263,21 @@ def handle_threat_detection(frame, user_id, user_email, cls_name, confidence, ti
             f"Regards,\nSuRक्षा AI",
             "Security Alert: Unauthorized Object Detected",
             user_email,
-            [user_email]
+            [user_email],
         )
+
 
 def update_analytics(objectsFreq, objectData, current_time):
     for obj, confidences in objectsFreq.items():
         if confidences:
             if obj in objectData:
                 objectData[obj]["freq"] = max(objectData[obj]["freq"], len(confidences))
-                objectData[obj]["maxConfidence"] = max(objectData[obj]["maxConfidence"], max(confidences))
-                objectData[obj]["minConfidence"] = min(objectData[obj]["minConfidence"], min(confidences))
+                objectData[obj]["maxConfidence"] = max(
+                    objectData[obj]["maxConfidence"], max(confidences)
+                )
+                objectData[obj]["minConfidence"] = min(
+                    objectData[obj]["minConfidence"], min(confidences)
+                )
             else:
                 objectData[obj] = {
                     "freq": len(confidences),
