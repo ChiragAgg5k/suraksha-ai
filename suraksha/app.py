@@ -17,10 +17,22 @@ from suraksha.services.firebase import auth, db, storage
 from suraksha.config import config
 from suraksha.services.chat import get_chat_response
 
+from google.cloud import exceptions as gcp_exceptions
+import logging
+import firebase_admin
+from firebase_admin import storage as admin_storage
+from firebase_admin import credentials, storage as admin_storage
+
+# Initialize Firebase Admin SDK (if not already done)
+if not firebase_admin._apps:
+    cred = credentials.Certificate('serviceAccountKey.json')
+    firebase_admin.initialize_app(cred, {
+        'storageBucket': 'spot-ai-64004.appspot.com'
+    })
 
 classNames = []
 thread_objects = []
-json_path = os.path.join(os.path.dirname(__file__), "data", "detection_classes.json")
+json_path = os.path.join(os.path.dirname(__file__), "data", "threat_detection_classes.json")
 with open(json_path, "r") as f:
     data = json.load(f)
     classNames = data["class_names"]
@@ -37,7 +49,7 @@ app.config["MAIL_PASSWORD"] = config.MAIL_PASSWORD
 app.config["MAIL_USE_TLS"] = config.MAIL_USE_TLS
 app.config["MAIL_USE_SSL"] = config.MAIL_USE_SSL
 
-model = YOLO("yolo11n.pt")
+model = YOLO("yolo11n_threat_detection.pt")
 mail = Mail(app)
 
 conversation_histories = {}
@@ -107,16 +119,22 @@ def send_analytics(data: dict, userId: str) -> None:
 
 
 def upload_frame_to_firebase(frame, user_id, timestamp, folder="records"):
-
     # Convert the frame to PNG image data
     _, buffer = cv2.imencode(".png", frame)
     image_data = buffer.tobytes()
 
     # Create a unique filename for the frame
-    filename = f"{user_id}/{folder}/{timestamp}.png"
+    filename = f"{user_id}/{folder}/{timestamp.replace(' ', '_').replace(':', '-')}.png"
 
-    # Upload the frame to Firebase Storage
-    storage.child(filename).put(image_data)
+    try:
+        # Upload the frame to Firebase Storage
+        bucket = admin_storage.bucket()
+        blob = bucket.blob(filename)
+        blob.upload_from_string(image_data, content_type="image/png")
+        logging.info(f"Successfully uploaded image to {filename}")
+    except Exception as e:
+        logging.error(f"Failed to upload image to Firebase: {str(e)}")
+        raise
 
 
 def get_images(user_id):
@@ -243,14 +261,37 @@ def gen_frames(user_id, user_email):
             b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame_bytes + b"\r\n"
         )
 
-
 def handle_threat_detection(
     frame, user_id, user_email, cls_name, confidence, timestamp
 ):
     with app.app_context():
-        upload_frame_to_firebase(
-            frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S")
-        )
+        # Generate a unique filename for the image
+        filename = f"{user_id}/records/{timestamp.strftime('%Y-%m-%d_%H-%M-%S')}.png"
+        
+        try:
+            # Upload the frame to Firebase Storage
+            upload_frame_to_firebase(frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+            
+            # Verify that the file exists before trying to generate a URL
+            bucket = admin_storage.bucket()
+            blob = bucket.blob(filename)
+            
+            if not blob.exists():
+                raise gcp_exceptions.NotFound(f"File not found: {filename}")
+
+            # Generate a signed URL
+            image_url = blob.generate_signed_url(datetime.timedelta(hours=1))
+            
+            if not image_url:
+                raise Exception("Failed to generate signed URL")
+
+        except gcp_exceptions.NotFound as e:
+            logging.error(f"File not found in storage: {str(e)}")
+            image_url = "Image not available. File upload may have failed."
+        except Exception as e:
+            logging.error(f"Error uploading image or generating URL: {str(e)}")
+            image_url = "Image URL not available due to technical issues."
+
         send_email(
             f"Security Alert: Unauthorized Object Detected\n\n"
             f"Object: {cls_name.capitalize()}\n"
@@ -258,13 +299,17 @@ def handle_threat_detection(
             f"Confidence Level: {confidence * 100:.1f}%\n\n"
             f"Description:\n"
             f"The object '{cls_name}' was detected by our security system. "
-            f"Please review the uploaded image for visual confirmation.\n\n"
+            f"An attempt was made to upload an image for visual confirmation.\n\n"
+            f"Image Status: {image_url}\n\n"
             f"This is an automated alert.\n\n"
             f"Regards,\nSuRक्षा AI",
             "Security Alert: Unauthorized Object Detected",
             user_email,
             [user_email],
         )
+        
+        # Log the full path that was attempted
+        logging.info(f"Attempted to access file at path: {filename}")
 
 
 def update_analytics(objectsFreq, objectData, current_time):

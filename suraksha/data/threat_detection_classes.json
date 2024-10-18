@@ -1,0 +1,13 @@
+{
+    "class_names": [
+        "ammo",
+        "firearm",
+        "grenade",
+        "knife",
+        "pistol",
+        "rocket"
+    ],
+    "threat_objects": [
+        "pistol"
+    ]
+}
