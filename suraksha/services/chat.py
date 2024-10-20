@@ -1,6 +1,4 @@
-from openai import OpenAI
 from krutrim_cloud import KrutrimCloud
-from suraksha.config import config
 from suraksha.services.firebase import db
 import datetime
 from dotenv import load_dotenv

@@ -20,7 +20,6 @@ from suraksha.services.chat import get_chat_response
 from google.cloud import exceptions as gcp_exceptions
 import logging
 import firebase_admin
-from firebase_admin import storage as admin_storage
 from firebase_admin import credentials, storage as admin_storage
 
 if not firebase_admin._apps:
