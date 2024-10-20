@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "suraksha"
-version = "0.8.5"
+version = "1.0.0"
 description = "SuRक्षा provides smart security surveillance solutions such as face recognition, object detection, and more."
 authors = ["ChiragAgg5k <110609663+ChiragAgg5k@users.noreply.github.com>"]
 readme = "README.md"
@@ -18,10 +18,12 @@ black = "^24.4.0"
 pytest = "^8.1.1"
 firebase = "^4.0.1"
 transformers = "^4.40.0"
-llmware = "^0.2.14"
 setuptools = "^72.1.0"
 python-dotenv = "^1.0.1"
-openai = "^1.40.1"
+krutrim-cloud = "^0.6.1"
+firebase-admin = "^6.5.0"
+openai = "^1.52.0"
+numpy = ">=2.1.0"
 
 
 [build-system]

@@ -23,7 +23,6 @@ import firebase_admin
 from firebase_admin import storage as admin_storage
 from firebase_admin import credentials, storage as admin_storage
 
-# Initialize Firebase Admin SDK (if not already done)
 if not firebase_admin._apps:
     cred = credentials.Certificate('serviceAccountKey.json')
     firebase_admin.initialize_app(cred, {

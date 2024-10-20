@@ -72,8 +72,9 @@ cd suraksha
 1. Install the required dependencies using Poetry.
 
 ```sh
-poetry install
 poetry shell
+poetry install
+pip install --force-reinstall -v "numpy==1.25.2" # fix some weird issue with krutrim
 ```
 
 3. Create a new **Firebase** project and get the required credentials. You can follow the instructions [here](https://firebase.google.com/docs/web/setup)
