@@ -53,7 +53,7 @@ def format_analytics_data(data):
     return formatted_data
 
 
-def get_chat_response(text, conversation_history, user_id):    
+def get_chat_response(text, conversation_history, user_id):
     query_time = None
     if "at" in text.lower():
         try:
@@ -86,7 +86,9 @@ def get_chat_response(text, conversation_history, user_id):
     """
 
     messages = [{"role": "system", "content": system_message}]
-    messages.extend(conversation_history[-5:])  # Keep only the last 5 messages for context
+    messages.extend(
+        conversation_history[-5:]
+    )  # Keep only the last 5 messages for context
     messages.append({"role": "user", "content": text})
 
     try:
@@ -104,7 +106,10 @@ def get_chat_response(text, conversation_history, user_id):
         assistant_response = chat_completion.choices[0].message.content
     except Exception as e:
         print(f"Error in API call: {e}")
-        return "I'm sorry, but I encountered an error. Please try again later.", conversation_history
+        return (
+            "I'm sorry, but I encountered an error. Please try again later.",
+            conversation_history,
+        )
 
     conversation_history.append({"role": "user", "content": text})
     conversation_history.append({"role": "assistant", "content": assistant_response})

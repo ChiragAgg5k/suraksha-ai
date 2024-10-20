@@ -24,14 +24,14 @@ from firebase_admin import storage as admin_storage
 from firebase_admin import credentials, storage as admin_storage
 
 if not firebase_admin._apps:
-    cred = credentials.Certificate('serviceAccountKey.json')
-    firebase_admin.initialize_app(cred, {
-        'storageBucket': 'spot-ai-64004.appspot.com'
-    })
+    cred = credentials.Certificate("serviceAccountKey.json")
+    firebase_admin.initialize_app(cred, {"storageBucket": "spot-ai-64004.appspot.com"})
 
 classNames = []
 thread_objects = []
-json_path = os.path.join(os.path.dirname(__file__), "data", "threat_detection_classes.json")
+json_path = os.path.join(
+    os.path.dirname(__file__), "data", "threat_detection_classes.json"
+)
 with open(json_path, "r") as f:
     data = json.load(f)
     classNames = data["class_names"]
@@ -52,6 +52,7 @@ model = YOLO("yolo11n_threat_detection.pt")
 mail = Mail(app)
 
 conversation_histories = {}
+
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -260,27 +261,30 @@ def gen_frames(user_id, user_email):
             b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame_bytes + b"\r\n"
         )
 
+
 def handle_threat_detection(
     frame, user_id, user_email, cls_name, confidence, timestamp
 ):
     with app.app_context():
         # Generate a unique filename for the image
         filename = f"{user_id}/records/{timestamp.strftime('%Y-%m-%d_%H-%M-%S')}.png"
-        
+
         try:
             # Upload the frame to Firebase Storage
-            upload_frame_to_firebase(frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S"))
-            
+            upload_frame_to_firebase(
+                frame, user_id, timestamp.strftime("%Y-%m-%d %H:%M:%S")
+            )
+
             # Verify that the file exists before trying to generate a URL
             bucket = admin_storage.bucket()
             blob = bucket.blob(filename)
-            
+
             if not blob.exists():
                 raise gcp_exceptions.NotFound(f"File not found: {filename}")
 
             # Generate a signed URL
             image_url = blob.generate_signed_url(datetime.timedelta(hours=1))
-            
+
             if not image_url:
                 raise Exception("Failed to generate signed URL")
 
@@ -306,7 +310,7 @@ def handle_threat_detection(
             user_email,
             [user_email],
         )
-        
+
         # Log the full path that was attempted
         logging.info(f"Attempted to access file at path: {filename}")
 
