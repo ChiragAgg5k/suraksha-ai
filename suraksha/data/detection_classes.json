@@ -82,17 +82,7 @@
         "toothbrush"
     ],
     "threat_objects": [
-        "knife",
-        "fork",
-        "gun",
-        "firearm",
-        "rifle",
-        "pistol",
-        "revolver",
-        "shotgun",
-        "fire",
-        "bomb",
-        "explosive",
-        "cell phone"
+        "cell phone",
+        "knife"
     ]
 }

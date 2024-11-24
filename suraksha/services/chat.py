@@ -90,7 +90,6 @@ def get_chat_response(text, conversation_history, user_id):
     messages.append({"role": "user", "content": text})
 
     try:
-        print(messages)
         chat_completion = client.chat.completions.create(
             model="Krutrim-spectre-v2",
             messages=messages,

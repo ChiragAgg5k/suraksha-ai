@@ -46,4 +46,4 @@ The future scope of the SuRक्षा project is vast, with numerous possibili
 
 By continuously incorporating user feedback, technological advancements, and innovative ideas, SuRक्षा can evolve to meet the changing security needs of individuals, communities, and organizations worldwide.
 
-![Framework](./Chatbot.png)
+![Use Case Diagram](./use-case-diagram.png)

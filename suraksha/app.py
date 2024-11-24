@@ -23,13 +23,13 @@ import firebase_admin
 from firebase_admin import credentials, storage as admin_storage
 
 if not firebase_admin._apps:
-    cred = credentials.Certificate("serviceAccountKey.json")
+    cred = credentials.Certificate("./serviceAccountKey.json")
     firebase_admin.initialize_app(cred, {"storageBucket": "spot-ai-64004.appspot.com"})
 
 classNames = []
 thread_objects = []
 json_path = os.path.join(
-    os.path.dirname(__file__), "data", "threat_detection_classes.json"
+    os.path.dirname(__file__), "data", "detection_classes.json"
 )
 with open(json_path, "r") as f:
     data = json.load(f)
@@ -47,7 +47,7 @@ app.config["MAIL_PASSWORD"] = config.MAIL_PASSWORD
 app.config["MAIL_USE_TLS"] = config.MAIL_USE_TLS
 app.config["MAIL_USE_SSL"] = config.MAIL_USE_SSL
 
-model = YOLO("yolo11n_threat_detection.pt")
+model = YOLO("yolo11n.pt")
 mail = Mail(app)
 
 conversation_histories = {}
@@ -168,7 +168,7 @@ def gen_frames(user_id, user_email):
     camera = cv2.VideoCapture(0)
     next_analytics_time = datetime.datetime.now()
     next_detection_time = datetime.datetime.now()
-    analytics_delta = datetime.timedelta(seconds=30)
+    analytics_delta = datetime.timedelta(seconds=5)
     detection_delta = datetime.timedelta(milliseconds=10)  # Adjust as needed
     objectData = {}
     email_sent = False
